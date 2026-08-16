@@ -151,4 +151,430 @@ background:#7c3aed;
 color:white;
 padding:8px 14px;
 border-radius:20px;
-font-size:
+font-size:12px;
+font-weight:bold;
+
+}
+
+
+
+.question{
+
+font-size:22px;
+font-weight:bold;
+margin:25px 0;
+line-height:1.5;
+
+}
+
+
+
+.option{
+
+width:100%;
+padding:15px;
+margin:8px 0;
+border-radius:12px;
+border:1px solid #ddd;
+background:white;
+text-align:left;
+cursor:pointer;
+font-size:16px;
+
+}
+
+
+
+.option:hover{
+
+background:#f5f3ff;
+
+}
+
+
+.correct{
+
+background:#dcfce7!important;
+border-color:#16a34a!important;
+
+}
+
+
+.wrong{
+
+background:#fee2e2!important;
+border-color:#dc2626!important;
+
+}
+
+
+.feedback{
+
+margin-top:20px;
+padding:15px;
+background:#f5f3ff;
+border-radius:12px;
+
+}
+
+
+.hidden{
+
+display:none;
+
+}
+
+
+.next{
+
+margin-top:20px;
+background:#7c3aed;
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+
+</style>
+
+</head>
+
+<body>
+  <div id="loginBox">
+
+<h1>
+🧠 MindArcade
+</h1>
+
+
+<p>
+<span id="namaProdukLogin">Psychology Review Game</span>
+</p>
+
+
+<p>
+Masukkan Access Code pembelian kamu
+</p>
+
+
+<input
+class="input"
+id="kode"
+placeholder="Contoh: MND-BHV-XXXXXX">
+
+
+<input
+class="input"
+id="email"
+placeholder="Email pembeli">
+
+
+<button
+class="btn"
+onclick="aktivasi()"
+id="btnAktivasi">
+
+🔓 Mulai Belajar
+
+</button>
+
+
+<div id="pesan"></div>
+
+
+</div>
+
+
+<div id="game" class="container">
+
+
+<div class="brand">
+
+🧠 Mind<span>Arcade</span>
+
+</div>
+
+
+<div class="subtitle">
+
+<span id="namaProdukGame">Psychology Review Game</span>
+
+</div>
+
+
+<div class="progress">
+
+<div
+class="progress-bar"
+id="progress">
+
+</div>
+
+</div>
+<div class="card">
+
+
+<span class="level" id="level">
+
+LEVEL 1
+
+</span>
+
+
+
+<div id="number"></div>
+
+
+
+<div class="question" id="question">
+
+Loading...
+
+</div>
+
+
+
+<div id="options"></div>
+
+
+
+<div
+class="feedback hidden"
+id="feedback">
+
+</div>
+
+
+
+<button
+class="next hidden"
+id="next">
+
+LANJUT →
+
+</button>
+
+
+
+</div>
+
+
+
+<div
+class="card hidden"
+id="result">
+
+
+<h2>
+
+🏆 Challenge Complete!
+
+</h2>
+
+
+
+<h1 id="score">
+
+</h1>
+
+
+
+<p id="message">
+
+</p>
+
+
+
+<button
+class="next"
+onclick="location.reload()">
+
+🔄 Main Lagi
+
+</button>
+
+
+</div>
+
+
+
+</div>
+  <script>
+
+let questions = [];
+let current = 0;
+let score = 0;
+let locked = false;
+let namaProduk = "";
+
+const level = document.getElementById("level");
+const number = document.getElementById("number");
+const question = document.getElementById("question");
+const options = document.getElementById("options");
+const feedback = document.getElementById("feedback");
+const next = document.getElementById("next");
+const progress = document.getElementById("progress");
+
+async function apiCall(action, payload) {
+  const res = await fetch("/.netlify/functions/api", {
+    method: "POST",
+    body: JSON.stringify(Object.assign({ action: action }, payload)),
+  });
+  return await res.json();
+}
+
+// AKTIVASI KODE
+async function aktivasi(){
+
+  let kode = document.getElementById("kode").value;
+  let email = document.getElementById("email").value;
+
+  if(kode=="" || email==""){
+    document.getElementById("pesan").innerHTML = "⚠️ Isi kode dan email terlebih dahulu";
+    return;
+  }
+
+  const btn = document.getElementById("btnAktivasi");
+  btn.disabled = true;
+  btn.innerHTML = "Memproses...";
+  document.getElementById("pesan").innerHTML = "";
+
+  try {
+    const res = await apiCall("cekKodeAkses", { kode: kode, email: email });
+
+    if (res.error) {
+      document.getElementById("pesan").innerHTML = "❌ Error server: " + res.error;
+      btn.disabled = false;
+      btn.innerHTML = "🔓 Mulai Belajar";
+      return;
+    }
+
+    document.getElementById("pesan").innerHTML = res.pesan;
+
+    if(res.sukses){
+      namaProduk = res.produk || "";
+      document.getElementById("namaProdukGame").innerHTML = "Learn • Play • Master | " + namaProduk;
+      document.getElementById("loginBox").style.display="none";
+      document.getElementById("game").style.display="block";
+      ambilSoal();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = "🔓 Mulai Belajar";
+    }
+  } catch (err) {
+    document.getElementById("pesan").innerHTML = "❌ Gagal konek ke server: " + err.message;
+    btn.disabled = false;
+    btn.innerHTML = "🔓 Mulai Belajar";
+  }
+}
+
+async function ambilSoal(){
+  question.innerHTML = "Loading...";
+  try {
+    const res = await apiCall("getQuestions", { namaProduk: namaProduk });
+
+    if (res.error) {
+      question.innerHTML = "❌ Error ambil soal: " + res.error;
+      return;
+    }
+
+    const data = res.questions;
+
+    if(!data || data.length===0){
+      question.innerHTML = "Belum ada soal untuk produk ini. Hubungi admin ya!";
+      return;
+    }
+
+    questions = data;
+    showQuestion();
+  } catch (err) {
+    question.innerHTML = "❌ Gagal konek ke server: " + err.message;
+  }
+}
+    function showQuestion(){
+  locked=false;
+  let q = questions[current];
+
+  level.innerHTML = q.level;
+  number.innerHTML = "Challenge " +(current+1)+ "/" +questions.length;
+  question.innerHTML = q.question;
+  options.innerHTML="";
+  feedback.classList.add("hidden");
+  next.classList.add("hidden");
+
+  q.options.forEach(function(item,index){
+    let button = document.createElement("button");
+    button.className="option";
+    button.innerHTML = String.fromCharCode(65+index) + ". " + item;
+    button.onclick=function(){ checkAnswer(index,button); };
+    options.appendChild(button);
+  });
+
+  progress.style.width = ((current)/questions.length*100) + "%";
+}
+
+function checkAnswer(answer,button){
+  if(locked) return;
+  locked=true;
+
+  let q = questions[current];
+  let correct = answer === q.answer;
+
+  let buttons = document.querySelectorAll(".option");
+  buttons.forEach(function(btn,index){
+    btn.disabled=true;
+    if(index===q.answer){ btn.classList.add("correct"); }
+  });
+
+  if(correct){
+    button.classList.add("correct");
+    score++;
+    feedback.innerHTML = "🎉 BENAR!<br><br>" + q.explanation;
+  } else {
+    button.classList.add("wrong");
+    feedback.innerHTML = "❌ BELUM TEPAT<br><br>" + q.explanation;
+  }
+
+  feedback.classList.remove("hidden");
+  next.classList.remove("hidden");
+}
+
+next.onclick=function(){
+  if(current < questions.length-1){
+    current++;
+    showQuestion();
+  } else {
+    finish();
+  }
+};
+
+function finish(){
+  document.querySelector("#game").style.display="none";
+  document.getElementById("result").classList.remove("hidden");
+
+  let persen = Math.round((score/questions.length)*100);
+
+  document.getElementById("score").innerHTML = score+ "/"+ questions.length+ " ("+ persen+ "%)";
+
+  if(persen>=85){
+    document.getElementById("message").innerHTML = "🧠 Behaviorism Master! Pemahaman sangat baik.";
+  } else if(persen>=70){
+    document.getElementById("message").innerHTML = "👍 Good Understanding! Tinggal review beberapa konsep.";
+  } else {
+    document.getElementById("message").innerHTML = "📚 Yuk review kembali materi Behaviorisme.";
+  }
+
+  progress.style.width="100%";
+}
+
+</script>
+
+
+</body>
+
+</html>
+<body>
