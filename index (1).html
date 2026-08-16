@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>MindArcade - Psychology Review Game</title>
+
+<style>
+
+:root{
+--primary:#7c3aed;
+--secondary:#ec4899;
+--primary-soft:#f3f0ff;
+}
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#100b24;
+color:white;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+/* LOGIN */
+
+#loginBox{
+max-width:450px;
+margin:60px auto;
+background:white;
+color:#111827;
+padding:30px;
+border-radius:20px;
+text-align:center;
+}
+
+#loginBox h1{
+color:var(--primary);
+}
+
+.input{
+width:100%;
+padding:13px;
+margin:8px 0;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:16px;
+}
+
+.btn{
+background:var(--primary);
+color:white;
+border:none;
+padding:13px 25px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+width:100%;
+}
+
+#pesan{
+margin-top:15px;
+font-weight:bold;
+}
+
+/* GAME */
+
+#game{
+display:none;
+}
+
+.modulelabel{
+color:var(--secondary);
+font-weight:bold;
+font-size:13px;
+letter-spacing:1px;
+}
+
+.moduletitle{
+font-size:32px;
+font-weight:900;
+margin:4px 0 6px;
+}
+
+.modulesubtitle{
+color:#c4b5fd;
+font-size:14px;
+margin-bottom:20px;
+}
+
+.statsrow{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-bottom:16px;
+}
+
+.statcard{
+background:#1c1740;
+border-radius:14px;
+padding:14px 16px;
+}
+
+.statcard .label{
+font-size:12px;
+color:#a29bd6;
+display:flex;
+align-items:center;
+gap:6px;
+margin-bottom:4px;
+}
+
+.statcard .value{
+font-size:24px;
+font-weight:800;
+}
+
+.progress{
+height:10px;
+background:#312e52;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:20px;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,var(--primary),var(--secondary));
+transition:width .3s ease;
+}
+
+.card{
+background:white;
+color:#111827;
+margin-top:20px;
+padding:25px;
+border-radius:20px;
+}
+
+.qtopbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:18px;
+}
+
+.level{
+display:inline-block;
+background:var(--primary);
+color:white;
+padding:8px 14px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+.number{
+color:var(--primary);
+font-weight:800;
+font-size:15px;
+}
+
+.question{
+font-size:22px;
+font-weight:bold;
+margin:10px 0 22px;
+line-height:1.5;
+}
+
+.option{
+width:100%;
+padding:14px;
+margin:8px 0;
+border-radius:12px;
+border:1px solid #ddd;
+background:white;
+text-align:left;
+cursor:pointer;
+font-size:15px;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.option .letter{
+background:var(--primary-soft);
+color:var(--primary);
+font-weight:800;
+min-width:28px;
+height:28px;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
+}
+
+.option:hover{
+background:#f5f3ff;
+}
+
+.correct{
+background:#dcfce7!important;
+border-color:#16a34a!important;
+}
+
+.correct .letter{
+background:#16a34a!important;
+color:white!important;
+}
+
+.wrong{
+background:#fee2e2!important;
+border-color:#dc2626!important;
+}
+
+.wrong .letter{
+background:#dc2626!important;
+color:white!important;
+}
+
+.feedback{
+margin-top:20px;
+padding:18px;
+background:#f5f3ff;
+border-radius:14px;
+}
+
+.feedback .fbtitle{
+font-weight:800;
+font-size:15px;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.feedback .tipsbox{
+background:white;
+border-radius:10px;
+padding:12px 14px;
+margin-top:10px;
+font-size:14px;
+line-height:1.5;
+}
+
+.feedback .tipsbox b{
+display:block;
+margin-bottom:4px;
+}
+
+.hidden{
+display:none;
+}
+
+.next{
+margin-top:20px;
+background:var(--primary);
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+width:100%;
+}
+
+.panel{
+background:#1c1740;
+border-radius:16px;
+padding:20px;
+margin-top:16px;
+}
+
+.panel h3{
+margin:0 0 12px;
+font-size:16px;
+}
+
+.levelmap-track{
+display:flex;
+flex-wrap:wrap;
+align-items:center;
+gap:6px;
+font-size:14px;
+color:#c4b5fd;
+}
+
+.levelmap-item{
+padding:5px 10px;
+border-radius:8px;
+background:#312e52;
+}
+
+.levelmap-item.active{
+background:var(--primary);
+color:white;
+font-weight:bold;
+}
+
+.statgrid{
+display:flex;
+flex-direction:column;
+gap:8px;
+font-size:14px;
+color:#e5e0ff;
+}
+
+.statgrid b{
+color:white;
+}
+
+.tipsbelajar{
+font-size:14px;
+color:#e5e0ff;
+line-height:1.6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="loginBox">
+
+<h1>🧠 MindArcade</h1>
+
+<p><span id="namaProdukLogin">Psychology Review Game</span></p>
+
+<p>Masukkan Access Code pembelian kamu</p>
+
+<input class="input" id="kode" placeholder="Contoh: MND-BHV-XXXXXX">
+
+<input class="input" id="email" placeholder="Email pembeli">
+
+<button class="btn" onclick="aktivasi()" id="btnAktivasi">🔓 Mulai Belajar</button>
+
+<div id="pesan"></div>
+
+</div>
+
+
+<div id="game" class="container">
+
+  <div class="modulelabel" id="moduleLabel">MODULE</div>
+  <div class="moduletitle"><span id="moduleIcon">🧠</span> <span id="moduleTitleText">MindArcade</span></div>
+  <div class="modulesubtitle" id="moduleSubtitle">Game review materi psikologi</div>
+
+  <div class="statsrow">
+    <div class="statcard">
+      <div class="label">⚡ XP</div>
+      <div class="value" id="statXp">0</div>
+    </div>
+    <div class="statcard">
+      <div class="label">🎯 ACCURACY</div>
+      <div class="value" id="statAccuracy">0%</div>
+    </div>
+    <div class="statcard">
+      <div class="label">❤️ LIVES</div>
+      <div class="value" id="statLives">3/3</div>
+    </div>
+    <div class="statcard">
+      <div class="label">🔥 STREAK</div>
+      <div class="value" id="statStreak">0</div>
+    </div>
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <div class="card" id="questionCard">
+
+    <div class="qtopbar">
+      <span class="level" id="level">LEVEL 1</span>
+      <span class="number" id="number">Challenge 1/1</span>
+    </div>
+
+    <div class="question" id="question">Loading...</div>
+
+    <div id="options"></div>
+
+    <div class="feedback hidden" id="feedback">
+      <div class="fbtitle" id="feedbackTitle">💡 FEEDBACK BELAJAR</div>
+      <div id="feedbackDesc">Pilih jawaban untuk melihat penjelasan konsep.</div>
+      <div class="tipsbox">
+        <b>Tips:</b>
+        <span id="feedbackTips"></span>
+      </div>
+    </div>
+
+    <button class="next hidden" id="next">LANJUT →</button>
+
+  </div>
+
+  <div class="panel">
+    <h3>🗺️ Peta Level</h3>
+    <div class="levelmap-track" id="levelMapTrack"></div>
+  </div>
+
+  <div class="panel">
+    <h3>📊 Statistik</h3>
+    <div class="statgrid">
+      <div>Jawaban benar: <b id="statBenar">0</b></div>
+      <div>Jawaban salah: <b id="statSalah">0</b></div>
+      <div>Progress: <b id="statProgress">0%</b></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>💡 Tips Belajar</h3>
+    <div class="tipsbelajar" id="tipsBelajar">Pahami konsep dan penerapannya di kehidupan sehari-hari, jangan cuma menghafal istilah.</div>
+  </div>
+
+  <div class="card hidden" id="result">
+    <h2>🏆 Challenge Complete!</h2>
+    <h1 id="score"></h1>
+    <p id="message"></p>
+    <button class="next" onclick="location.reload()">🔄 Main Lagi</button>
+  </div>
+
+</div>
+
+
+<script>
+
+let questions = [];
+let current = 0;
+let score = 0;
+let locked = false;
+let namaProduk = "";
+
+let xp = 0;
+let lives = 3;
+const MAX_LIVES = 3;
+let streak = 0;
+let correctCount = 0;
+let wrongCount = 0;
+
+const level = document.getElementById("level");
+const number = document.getElementById("number");
+const question = document.getElementById("question");
+const options = document.getElementById("options");
+const feedback = document.getElementById("feedback");
+const feedbackTitle = document.getElementById("feedbackTitle");
+const feedbackDesc = document.getElementById("feedbackDesc");
+const feedbackTips = document.getElementById("feedbackTips");
+const next = document.getElementById("next");
+const progress = document.getElementById("progress");
+
+async function apiCall(action, payload) {
+  const res = await fetch("/.netlify/functions/api", {
+    method: "POST",
+    body: JSON.stringify(Object.assign({ action: action }, payload)),
+  });
+  return await res.json();
+}
+
+function ekstrakNamaBab(judulLengkap) {
+  const parts = String(judulLengkap || "").split(/—|–|-{1,2}/);
+  return parts[parts.length - 1].trim();
+}
+
+const THEMES = [
+  { match: /kembang/i, icon: "🌱", primary: "#16a34a", secondary: "#14b8a6", soft: "#ecfdf5" },
+  { match: /sosial/i, icon: "🧑‍🤝‍🧑", primary: "#2563eb", secondary: "#06b6d4", soft: "#eff6ff" },
+  { match: /kepribadian/i, icon: "🎭", primary: "#ea580c", secondary: "#f59e0b", soft: "#fff7ed" },
+  { match: /kognitif/i, icon: "💭", primary: "#4f46e5", secondary: "#818cf8", soft: "#eef2ff" },
+  { match: /abnormal|klinis/i, icon: "🌀", primary: "#dc2626", secondary: "#f43f5e", soft: "#fef2f2" },
+  { match: /industri|organisasi/i, icon: "💼", primary: "#0f766e", secondary: "#14b8a6", soft: "#f0fdfa" },
+  { match: /behavior/i, icon: "🧠", primary: "#7c3aed", secondary: "#ec4899", soft: "#f3f0ff" },
+];
+
+function terapkanTema(babName){
+  const found = THEMES.find(function(t){ return t.match.test(babName); });
+  const t = found || { icon: "🧠", primary: "#7c3aed", secondary: "#ec4899", soft: "#f3f0ff" };
+  document.documentElement.style.setProperty("--primary", t.primary);
+  document.documentElement.style.setProperty("--secondary", t.secondary);
+  document.documentElement.style.setProperty("--primary-soft", t.soft);
+  document.getElementById("moduleIcon").innerHTML = t.icon;
+}
+
+// AKTIVASI KODE
+async function aktivasi(){
+
+  let kode = document.getElementById("kode").value;
+  let email = document.getElementById("email").value;
+
+  if(kode=="" || email==""){
+    document.getElementById("pesan").innerHTML = "⚠️ Isi kode dan email terlebih dahulu";
+    return;
+  }
+
+  const btn = document.getElementById("btnAktivasi");
+  btn.disabled = true;
+  btn.innerHTML = "Memproses...";
+  document.getElementById("pesan").innerHTML = "";
+
+  try {
+    const res = await apiCall("cekKodeAkses", { kode: kode, email: email });
+
+    if (res.error) {
+      document.getElementById("pesan").innerHTML = "❌ Error server: " + res.error;
+      btn.disabled = false;
+      btn.innerHTML = "🔓 Mulai Belajar";
+      return;
+    }
+
+    document.getElementById("pesan").innerHTML = res.pesan;
+
+    if(res.sukses){
+      namaProduk = res.produk || "";
+      const bab = ekstrakNamaBab(namaProduk);
+      terapkanTema(bab);
+      document.getElementById("namaProdukLogin").innerHTML = namaProduk;
+      document.getElementById("moduleTitleText").innerHTML = bab.toUpperCase();
+      document.getElementById("moduleSubtitle").innerHTML = "Game review materi " + bab + " dalam Psikologi";
+      document.getElementById("loginBox").style.display="none";
+      document.getElementById("game").style.display="block";
+      ambilSoal();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = "🔓 Mulai Belajar";
+    }
+  } catch (err) {
+    document.getElementById("pesan").innerHTML = "❌ Gagal konek ke server: " + err.message;
+    btn.disabled = false;
+    btn.innerHTML = "🔓 Mulai Belajar";
+  }
+}
+
+async function ambilSoal(){
+  question.innerHTML = "Loading...";
+  try {
+    const res = await apiCall("getQuestions", { namaProduk: namaProduk });
+
+    if (res.error) {
+      question.innerHTML = "❌ Error ambil soal: " + res.error;
+      return;
+    }
+
+    const data = res.questions;
+
+    if(!data || data.length===0){
+      question.innerHTML = "Belum ada soal untuk produk ini. Hubungi admin ya!";
+      return;
+    }
+
+    questions = data;
+    buildLevelMap();
+    updateStats();
+    showQuestion();
+  } catch (err) {
+    question.innerHTML = "❌ Gagal konek ke server: " + err.message;
+  }
+}
+
+function buildLevelMap(){
+  const track = document.getElementById("levelMapTrack");
+  const seen = [];
+  questions.forEach(function(q){
+    const nama = String(q.level || "").split(/—|–|-{1,2}/).pop().trim() || q.level;
+    if (seen.indexOf(nama) === -1) seen.push(nama);
+  });
+  track.innerHTML = seen.map(function(nama, i){
+    return '<span class="levelmap-item" data-nama="'+nama+'">'+ (i>0 ? "→ " : "") + nama + '</span>';
+  }).join(" ");
+}
+
+function updateLevelMapActive(){
+  const q = questions[current];
+  const namaSekarang = String(q.level || "").split(/—|–|-{1,2}/).pop().trim() || q.level;
+  document.querySelectorAll(".levelmap-item").forEach(function(el){
+    if(el.getAttribute("data-nama") === namaSekarang){
+      el.classList.add("active");
+    } else {
+      el.classList.remove("active");
+    }
+  });
+}
+
+function updateStats(){
+  document.getElementById("statXp").innerHTML = xp;
+  const totalJawab = correctCount + wrongCount;
+  const acc = totalJawab > 0 ? Math.round((correctCount/totalJawab)*100) : 0;
+  document.getElementById("statAccuracy").innerHTML = acc + "%";
+  document.getElementById("statLives").innerHTML = lives + "/" + MAX_LIVES;
+  document.getElementById("statStreak").innerHTML = streak;
+  document.getElementById("statBenar").innerHTML = correctCount;
+  document.getElementById("statSalah").innerHTML = wrongCount;
+  const prog = questions.length > 0 ? Math.round((current/questions.length)*100) : 0;
+  document.getElementById("statProgress").innerHTML = prog + "%";
+}
+
+function showQuestion(){
+  locked=false;
+  let q = questions[current];
+
+  level.innerHTML = q.level;
+  number.innerHTML = "Challenge " +(current+1)+ "/" +questions.length;
+  question.innerHTML = q.question;
+  options.innerHTML="";
+  feedback.classList.add("hidden");
+  next.classList.add("hidden");
+
+  q.options.forEach(function(item,index){
+    let button = document.createElement("button");
+    button.className="option";
+    button.innerHTML = '<span class="letter">' + String.fromCharCode(65+index) + '</span><span>' + item + '</span>';
+    button.onclick=function(){ checkAnswer(index,button); };
+    options.appendChild(button);
+  });
+
+  progress.style.width = ((current)/questions.length*100) + "%";
+  updateLevelMapActive();
+  updateStats();
+}
+
+function checkAnswer(answer,button){
+  if(locked) return;
+  locked=true;
+
+  let q = questions[current];
+  let correct = answer === q.answer;
+
+  let buttons = document.querySelectorAll(".option");
+  buttons.forEach(function(btn,index){
+    btn.disabled=true;
+    if(index===q.answer){ btn.classList.add("correct"); }
+  });
+
+  if(correct){
+    button.classList.add("correct");
+    score++;
+    xp += 10;
+    streak++;
+    correctCount++;
+    feedbackTitle.innerHTML = "🎉 BENAR!";
+    feedbackDesc.innerHTML = "Jawabanmu tepat, mantap!";
+  } else {
+    button.classList.add("wrong");
+    streak = 0;
+    wrongCount++;
+    lives = Math.max(0, lives - 1);
+    feedbackTitle.innerHTML = "❌ BELUM TEPAT";
+    feedbackDesc.innerHTML = "Yuk cek penjelasannya di bawah.";
+  }
+
+  feedbackTips.innerHTML = q.explanation || "";
+  feedback.classList.remove("hidden");
+  next.classList.remove("hidden");
+  updateStats();
+}
+
+next.onclick=function(){
+  if(current < questions.length-1){
+    current++;
+    showQuestion();
+  } else {
+    finish();
+  }
+};
+
+function finish(){
+  document.getElementById("questionCard").style.display="none";
+
+  const result = document.getElementById("result");
+  result.classList.remove("hidden");
+
+  let persen = Math.round((score/questions.length)*100);
+
+  document.getElementById("score").innerHTML = score+ "/"+ questions.length+ " ("+ persen+ "%)";
+
+  if(persen>=85){
+    document.getElementById("message").innerHTML = "🧠 Master! Pemahaman sangat baik.";
+  } else if(persen>=70){
+    document.getElementById("message").innerHTML = "👍 Good Understanding! Tinggal review beberapa konsep.";
+  } else {
+    document.getElementById("message").innerHTML = "📚 Yuk review kembali materinya.";
+  }
+
+  progress.style.width="100%";
+  updateStats();
+}
+
+</script>
+
+</body>
+
+</html>
