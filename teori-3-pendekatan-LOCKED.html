@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindArcade — Teori Psikoanalisa, Kognitif, dan Kontekstual</title>
+<style>
+:root{--bg1:#0b1020;--bg2:#312e81;--accent:#f472b6;--accent2:#7dd3fc;--text:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,var(--bg1),#1e1b4b,var(--bg2));min-height:100vh;color:#fff;overflow-x:hidden;position:relative}
+
+.blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;z-index:0;animation:float 9s ease-in-out infinite}
+.blob1{width:280px;height:280px;background:#7dd3fc;top:-80px;left:-80px;animation-delay:0s}
+.blob2{width:220px;height:220px;background:#f472b6;bottom:-60px;right:-60px;animation-delay:2s}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-25px) scale(1.08)}}
+
+.wrap{max-width:880px;margin:auto;padding:20px;position:relative;z-index:1}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.brand{font-size:22px;font-weight:800}
+.brand span{color:var(--accent2)}
+.locktag{font-size:11px;font-weight:800;padding:6px 11px;border:1px solid #ffffff40;border-radius:99px;color:#fff}
+
+.bar{height:8px;background:#ffffff22;border-radius:20px;overflow:hidden;margin-bottom:16px}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .5s ease}
+
+.shell{background:#ffffff10;border:1px solid #ffffff20;border-radius:26px;padding:22px;backdrop-filter:blur(6px)}
+
+.screen{display:none;animation:fadein .5s ease}
+.screen.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* LOGIN */
+#loginBox{max-width:420px;margin:20px auto;background:#fff;color:var(--text);padding:28px;border-radius:22px;text-align:center}
+#loginBox h1{color:#7c3aed;font-size:22px;margin-bottom:4px}
+#loginBox p{color:#64748b;font-size:14px}
+.input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:1px solid #ddd;font-size:16px}
+#pesanLogin{margin-top:12px;font-weight:bold;font-size:14px}
+
+.hero{text-align:center;padding:20px 6px}
+.hero .icon{font-size:64px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.hero h1{font-size:clamp(24px,6vw,36px);margin:10px 0 6px}
+.hero p{color:#dbeafe;line-height:1.6;max-width:600px;margin:auto}
+.legend{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.legend span{background:#ffffff14;padding:8px 13px;border-radius:99px;font-size:13px}
+
+.btn{border:0;border-radius:14px;padding:14px 22px;font-weight:800;cursor:pointer;background:#fff;color:var(--text);margin-top:18px;font-size:15px;transition:transform .15s ease;width:100%}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.6}
+
+.chapter-intro{text-align:center;padding:36px 10px}
+.chapter-intro .badge{display:inline-block;font-size:13px;font-weight:800;padding:8px 16px;border-radius:99px;margin-bottom:14px;background:#ffffff20}
+.chapter-intro .icon{font-size:70px;animation:popin .5s ease}
+@keyframes popin{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.chapter-intro h2{font-size:28px;margin:10px 0}
+.chapter-intro p{color:#dbeafe;line-height:1.6;max-width:520px;margin:auto}
+
+.game{background:#fff;color:var(--text);border-radius:22px;padding:22px}
+.kicker{font-size:12px;letter-spacing:1px;font-weight:800;color:#7c3aed}
+.scene{background:linear-gradient(135deg,#ede9fe,#e0f2fe);border-radius:18px;padding:22px;min-height:150px;display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px}
+.scene .figure{font-size:56px;animation:entrance .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes entrance{0%{transform:translateY(30px) scale(.5);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+.question{font-size:19px;font-weight:800;margin:16px 0 6px;line-height:1.5}
+.choices{display:grid;gap:10px;margin-top:14px}
+.choice{padding:14px;text-align:left;border:2px solid #e2e8f0;background:#f8fafc;border-radius:14px;cursor:pointer;color:var(--text);font-size:15px;display:flex;gap:10px;align-items:center;transition:transform .1s ease;width:100%}
+.choice:active{transform:scale(.98)}
+.choice .lt{background:#ede9fe;color:#7c3aed;font-weight:800;min-width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.choice.correct{background:#dcfce7;border-color:#16a34a;animation:pop .35s ease}
+.choice.correct .lt{background:#16a34a;color:#fff}
+.choice.wrong{background:#fee2e2;border-color:#dc2626;animation:shake .4s ease}
+.choice.wrong .lt{background:#dc2626;color:#fff}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+.feedback{margin-top:14px;padding:15px;border-radius:14px;background:#eff6ff;line-height:1.55;animation:fadein .3s ease}
+.next{display:none;background:#172033;color:#fff}
+
+.result{text-align:center;padding:20px}
+.trophy{font-size:64px;animation:bob 2.4s ease-in-out infinite}
+.score{font-size:56px;font-weight:900;margin:6px 0}
+.small{color:#64748b;line-height:1.6}
+.confetti{position:fixed;top:-20px;width:9px;height:14px;z-index:5;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+
+.sound-toggle{position:fixed;bottom:16px;right:16px;background:#ffffff20;border:1px solid #ffffff40;color:#fff;border-radius:99px;padding:9px 14px;font-size:13px;cursor:pointer;z-index:6}
+@media(max-width:600px){.scene{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Suara: ON</button>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">🧠 Mind<span>Arcade</span></div>
+    <div class="locktag">🔒 15 SOAL • 3 TEORI</div>
+  </div>
+
+  <div class="bar" id="topBar" style="display:none"><div class="fill" id="fill"></div></div>
+
+  <div class="shell">
+
+    <section class="screen active" id="loginScreen">
+      <div id="loginBox">
+        <h1>🔒 Teori Psikoanalisa, Kognitif, dan Kontekstual</h1>
+        <p>Masukkan Access Code pembelian kamu</p>
+        <input class="input" id="kode" placeholder="Contoh: MND-XXX-XXXXXX">
+        <input class="input" id="email" placeholder="Email pembeli">
+        <button class="btn" onclick="aktivasi()" id="btnAktivasi">🔓 Mulai Belajar</button>
+        <div id="pesanLogin"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="intro">
+      <div class="hero">
+        <div class="icon">🧠✨</div>
+        <h1>Psikoanalisis vs Kognitif vs Kontekstual</h1>
+        <p>Tiga cara berbeda memahami manusia. Jelajahi tiap teori lewat kasus singkat, lihat animasinya, dengar responsnya, lalu uji pemahamanmu lewat 15 soal.</p>
+        <div class="legend">
+          <span>🌊 Psikoanalisis</span>
+          <span>🧩 Kognitif</span>
+          <span>🌍 Kontekstual</span>
+        </div>
+        <button class="btn" onclick="mulai()">Mulai Eksplorasi →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="chapterIntro">
+      <div class="chapter-intro">
+        <div class="badge" id="chapBadge"></div>
+        <div class="icon" id="chapIcon"></div>
+        <h2 id="chapTitle"></h2>
+        <p id="chapDesc"></p>
+        <button class="btn" onclick="mulaiSoalBab()">Lanjut →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="game">
+      <div class="game">
+        <div class="kicker" id="round"></div>
+        <div class="scene" id="scene"></div>
+        <div class="question" id="question"></div>
+        <div class="choices" id="choices"></div>
+        <div id="feedback"></div>
+        <button class="btn next" id="next">Lanjut →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="finish">
+      <div class="game result">
+        <div class="trophy">🏆</div>
+        <div class="kicker">MISSION COMPLETE</div>
+        <h2>Personality &amp; Development Explorer</h2>
+        <div class="score" id="score">0%</div>
+        <p class="small" id="message"></p>
+        <button class="btn" onclick="location.reload()">Main Lagi</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+/* ===== NAMA PRODUK (harus PERSIS sama dengan judul produk di Lynk.id) ===== */
+const NAMA_PRODUK_INI = "Teori Psikoanalisa, Kognitif, dan Kontekstual";
+
+/* ===== SUARA (sintesis langsung, tanpa file audio) ===== */
+let soundOn = true;
+let audioCtx = null;
+function getCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+function toggleSound(){
+  soundOn = !soundOn;
+  document.getElementById("soundToggle").textContent = soundOn ? "🔊 Suara: ON" : "🔇 Suara: OFF";
+}
+function nada(freq, durasi=0.15, tipe='sine', delay=0, volume=0.16){
+  if(!soundOn) return;
+  try{
+    const ctx = getCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = tipe;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(volume, ctx.currentTime + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + durasi);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + durasi);
+  }catch(e){}
+}
+function suaraBenar(){ nada(659,0.12); nada(880,0.16,'sine',0.11); }
+function suaraSalah(){ nada(200,0.28,'sawtooth',0,0.12); }
+function suaraKlik(){ nada(500,0.05,'square',0,0.08); }
+function suaraFanfare(){ [523,659,784,1047].forEach((f,i)=>nada(f,0.2,'triangle',i*0.16,0.14)); }
+
+/* ===== LOGIN / KUNCI (pakai backend Netlify Function yang sama) ===== */
+async function apiCall(action, payload) {
+  const res = await fetch("/.netlify/functions/api", {
+    method: "POST",
+    body: JSON.stringify(Object.assign({ action: action }, payload)),
+  });
+  return await res.json();
+}
+
+async function aktivasi(){
+  const kode = document.getElementById("kode").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const pesan = document.getElementById("pesanLogin");
+
+  if(kode==="" || email===""){
+    pesan.innerHTML = "⚠️ Isi kode dan email terlebih dahulu";
+    return;
+  }
+
+  const btn = document.getElementById("btnAktivasi");
+  btn.disabled = true;
+  btn.innerHTML = "Memproses...";
+  pesan.innerHTML = "";
+
+  try {
+    const res = await apiCall("cekKodeAkses", { kode, email });
+
+    if (res.error) {
+      pesan.innerHTML = "❌ Error server: " + res.error;
+      btn.disabled = false; btn.innerHTML = "🔓 Mulai Belajar";
+      return;
+    }
+
+    if (!res.sukses) {
+      pesan.innerHTML = res.pesan || "❌ Kode tidak valid";
+      btn.disabled = false; btn.innerHTML = "🔓 Mulai Belajar";
+      return;
+    }
+
+    const produkDiKode = String(res.produk || "").trim();
+    if (produkDiKode !== NAMA_PRODUK_INI) {
+      pesan.innerHTML = "❌ Kode ini bukan untuk produk '" + NAMA_PRODUK_INI + "'. Kode kamu untuk: " + produkDiKode;
+      btn.disabled = false; btn.innerHTML = "🔓 Mulai Belajar";
+      return;
+    }
+
+    // Sukses & produk cocok — buka gerbangnya
+    document.getElementById("loginScreen").classList.remove("active");
+    document.getElementById("topBar").style.display = "block";
+    getCtx();
+    show("intro");
+
+  } catch (err) {
+    pesan.innerHTML = "❌ Gagal konek ke server: " + err.message;
+    btn.disabled = false; btn.innerHTML = "🔓 Mulai Belajar";
+  }
+}
+
+/* ===== DATA SOAL (5 per teori = 15 total) ===== */
+const BAB = [
+  {
+    id:"psikoanalisis", badge:"🌊 BAGIAN 1", icon:"🌊🧠",
+    judul:"Psikoanalisis (Freud)",
+    deskripsi:"Freud percaya sebagian besar perilaku manusia digerakkan oleh dorongan bawah sadar yang berkonflik satu sama lain.",
+    soal:[
+      { figur:"👶💭", pertanyaan:"Menurut Freud, bagian kepribadian yang beroperasi berdasarkan prinsip kesenangan dan menuntut pemuasan segera adalah...",
+        opsi:["Ego","Id","Superego","Ego ideal"], jawaban:1,
+        penjelasan:"Id beroperasi berdasarkan prinsip kesenangan (pleasure principle) — mencari kepuasan instan tanpa mempertimbangkan realitas atau moral." },
+      { figur:"😰✋", pertanyaan:"Seorang anak menggigiti kuku terus-menerus setiap kali cemas. Ini contoh mekanisme pertahanan...",
+        opsi:["Represi","Regresi","Proyeksi","Sublimasi"], jawaban:1,
+        penjelasan:"Regresi adalah kembalinya perilaku ke tahap perkembangan lebih awal (di sini: kepuasan oral) sebagai respons terhadap stres." },
+      { figur:"👦👧", pertanyaan:"Tahap psikoseksual di mana anak mulai mengalami konflik Oedipus/Electra menurut Freud adalah tahap...",
+        opsi:["Oral","Anal","Phallic","Latency"], jawaban:2,
+        penjelasan:"Tahap phallic (usia sekitar 3-6 tahun) ditandai konflik Oedipus/Electra, saat anak mulai menyadari perbedaan gender & tertarik pada orang tua lawan jenis." },
+      { figur:"🧊🌊", pertanyaan:"Freud mengibaratkan kepribadian seperti gunung es. Bagian yang tersembunyi di bawah permukaan (sebagian besar) mewakili...",
+        opsi:["Alam sadar","Alam bawah sadar","Alam pra-sadar","Ego rasional"], jawaban:1,
+        penjelasan:"Sebagian besar pikiran, dorongan, dan ingatan menurut Freud berada di alam bawah sadar (unconscious), memengaruhi perilaku tanpa kita sadari." },
+      { figur:"🙅‍♀️🚫", pertanyaan:"Seseorang yang melupakan sama sekali kejadian traumatis masa kecilnya menunjukkan mekanisme pertahanan...",
+        opsi:["Represi","Rasionalisasi","Displacement","Denial"], jawaban:0,
+        penjelasan:"Represi adalah menekan ingatan atau dorongan yang mengancam ke alam bawah sadar, sehingga tidak disadari secara sengaja." },
+    ]
+  },
+  {
+    id:"kognitif", badge:"🧩 BAGIAN 2", icon:"🧩🧠",
+    judul:"Kognitif (Piaget)",
+    deskripsi:"Piaget melihat anak sebagai 'ilmuwan kecil' yang aktif membangun pemahaman dunia lewat skema mental yang terus berkembang.",
+    soal:[
+      { figur:"🧠➕", pertanyaan:"Proses memasukkan informasi baru ke dalam skema yang sudah dimiliki disebut...",
+        opsi:["Akomodasi","Asimilasi","Ekuilibrasi","Konservasi"], jawaban:1,
+        penjelasan:"Asimilasi adalah proses memasukkan pengalaman baru ke dalam skema yang sudah ada, tanpa mengubah skema itu sendiri." },
+      { figur:"🥛🫙", pertanyaan:"Anak menganggap air di gelas tinggi 'lebih banyak' dari gelas pendek, padahal jumlahnya sama. Ini menunjukkan anak belum menguasai...",
+        opsi:["Object permanence","Konservasi","Egosentrisme","Abstraksi"], jawaban:1,
+        penjelasan:"Konservasi adalah pemahaman bahwa jumlah/kuantitas tetap sama meski bentuk wadahnya berubah — biasanya belum dikuasai di tahap praoperasional." },
+      { figur:"🧑‍🎓💭", pertanyaan:"Tahap perkembangan kognitif Piaget di mana individu mulai bisa berpikir hipotesis dan abstrak adalah...",
+        opsi:["Sensorimotor","Praoperasional","Operasional konkret","Operasional formal"], jawaban:3,
+        penjelasan:"Operasional formal (mulai usia ~11 tahun) memungkinkan berpikir abstrak, hipotesis, dan penalaran logis tingkat lanjut." },
+      { figur:"🙈👶", pertanyaan:"Bayi yang mulai menyadari bahwa mainan yang ditutup kain tetap ada meski tak terlihat, menunjukkan kemampuan...",
+        opsi:["Object permanence","Konservasi","Reversibilitas","Klasifikasi"], jawaban:0,
+        penjelasan:"Object permanence adalah pemahaman bahwa objek tetap ada meski tidak terlihat — berkembang di tahap sensorimotor." },
+      { figur:"⚖️🔄", pertanyaan:"Ketika skema lama tidak lagi cocok dengan pengalaman baru, sehingga skema itu perlu diubah, proses ini disebut...",
+        opsi:["Asimilasi","Akomodasi","Konservasi","Sentrasi"], jawaban:1,
+        penjelasan:"Akomodasi terjadi saat skema yang ada diubah/disesuaikan karena informasi baru tidak cocok dengan skema lama." },
+    ]
+  },
+  {
+    id:"kontekstual", badge:"🌍 BAGIAN 3", icon:"🌍🧠",
+    judul:"Kontekstual (Bronfenbrenner)",
+    deskripsi:"Bronfenbrenner melihat perkembangan sebagai hasil interaksi individu dengan lapisan-lapisan lingkungan, dari yang terdekat sampai yang terjauh.",
+    soal:[
+      { figur:"🏠👨‍👩‍👧", pertanyaan:"Lingkungan langsung yang paling dekat berinteraksi dengan individu (keluarga, sekolah) disebut...",
+        opsi:["Mikrosistem","Mesosistem","Eksosistem","Makrosistem"], jawaban:0,
+        penjelasan:"Mikrosistem adalah lingkungan terdekat tempat individu berinteraksi langsung, seperti keluarga, sekolah, dan teman sebaya." },
+      { figur:"🏢👔", pertanyaan:"Kebijakan di tempat kerja orang tua yang memengaruhi anak, meski anak tidak terlibat langsung di dalamnya, adalah contoh...",
+        opsi:["Mikrosistem","Mesosistem","Eksosistem","Kronosistem"], jawaban:2,
+        penjelasan:"Eksosistem mencakup lingkungan yang memengaruhi individu secara tidak langsung — individu tidak berpartisipasi aktif di dalamnya, tapi tetap terdampak." },
+      { figur:"📱⏳", pertanyaan:"Perubahan pola asuh akibat pergeseran zaman (misalnya era digital) termasuk dimensi...",
+        opsi:["Mikrosistem","Makrosistem","Kronosistem","Mesosistem"], jawaban:2,
+        penjelasan:"Kronosistem adalah dimensi waktu — mencakup perubahan dan transisi sepanjang hidup individu maupun perubahan sosial dari waktu ke waktu." },
+      { figur:"🏫🔗🏠", pertanyaan:"Hubungan/keterkaitan antara sekolah dan keluarga (misal komunikasi guru-orang tua) termasuk dalam...",
+        opsi:["Mikrosistem","Mesosistem","Eksosistem","Makrosistem"], jawaban:1,
+        penjelasan:"Mesosistem adalah hubungan ANTAR mikrosistem — misalnya keterkaitan antara rumah dan sekolah dalam kehidupan anak." },
+      { figur:"🌏📜", pertanyaan:"Nilai budaya, hukum, dan norma masyarakat secara luas yang membentuk cara individu dibesarkan termasuk...",
+        opsi:["Mikrosistem","Eksosistem","Makrosistem","Kronosistem"], jawaban:2,
+        penjelasan:"Makrosistem mencakup pola budaya, nilai, hukum, dan ideologi masyarakat luas yang membentuk konteks perkembangan individu." },
+    ]
+  },
+];
+
+/* ===== LOGIKA GAME ===== */
+let babIndex = 0, soalIndex = 0, benar = 0, totalSoal = BAB.reduce((a,b)=>a+b.soal.length,0), soalKeBerapa = 0;
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function updateBar(){
+  document.getElementById("fill").style.width = (soalKeBerapa/totalSoal*100)+"%";
+}
+
+function mulai(){
+  suaraKlik();
+  babIndex = 0;
+  tampilkanChapterIntro();
+}
+
+function tampilkanChapterIntro(){
+  const bab = BAB[babIndex];
+  document.getElementById("chapBadge").textContent = bab.badge;
+  document.getElementById("chapIcon").textContent = bab.icon;
+  document.getElementById("chapTitle").textContent = bab.judul;
+  document.getElementById("chapDesc").textContent = bab.deskripsi;
+  show("chapterIntro");
+}
+
+function mulaiSoalBab(){
+  suaraKlik();
+  soalIndex = 0;
+  show("game");
+  renderSoal();
+}
+
+function renderSoal(){
+  const bab = BAB[babIndex];
+  const s = bab.soal[soalIndex];
+  soalKeBerapa = BAB.slice(0,babIndex).reduce((a,b)=>a+b.soal.length,0) + soalIndex;
+  updateBar();
+
+  document.getElementById("round").textContent = bab.judul.toUpperCase() + " • Soal " + (soalIndex+1) + "/" + bab.soal.length;
+  document.getElementById("scene").innerHTML = '<div class="figure">'+s.figur+'</div>';
+  document.getElementById("question").textContent = s.pertanyaan;
+
+  const choicesEl = document.getElementById("choices");
+  choicesEl.innerHTML = "";
+  s.opsi.forEach((op, i)=>{
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.innerHTML = '<span class="lt">'+String.fromCharCode(65+i)+'</span><span>'+op+'</span>';
+    b.onclick = ()=> jawab(i, b, s);
+    choicesEl.appendChild(b);
+  });
+
+  document.getElementById("feedback").innerHTML = "";
+  const next = document.getElementById("next");
+  next.style.display = "none";
+  next.onclick = lanjut;
+}
+
+function jawab(i, btn, s){
+  suaraKlik();
+  document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+  const fb = document.getElementById("feedback");
+
+  if(i === s.jawaban){
+    benar++;
+    btn.classList.add("correct");
+    suaraBenar();
+    fb.innerHTML = '<div class="feedback">✅ <b>Tepat!</b><br>'+s.penjelasan+'</div>';
+  } else {
+    btn.classList.add("wrong");
+    document.querySelectorAll(".choice")[s.jawaban].classList.add("correct");
+    suaraSalah();
+    fb.innerHTML = '<div class="feedback">💡 <b>Belum tepat.</b> Jawaban yang benar: <b>'+s.opsi[s.jawaban]+'</b><br>'+s.penjelasan+'</div>';
+  }
+
+  const bab = BAB[babIndex];
+  const next = document.getElementById("next");
+  const soalTerakhirDiBab = soalIndex === bab.soal.length - 1;
+  const babTerakhir = babIndex === BAB.length - 1;
+  next.textContent = (soalTerakhirDiBab && babTerakhir) ? "Lihat Hasil →" : (soalTerakhirDiBab ? "Lanjut ke Bab Berikutnya →" : "Lanjut →");
+  next.style.display = "inline-block";
+}
+
+function lanjut(){
+  suaraKlik();
+  const bab = BAB[babIndex];
+  if(soalIndex < bab.soal.length - 1){
+    soalIndex++;
+    renderSoal();
+  } else if(babIndex < BAB.length - 1){
+    babIndex++;
+    tampilkanChapterIntro();
+  } else {
+    selesai();
+  }
+}
+
+function selesai(){
+  soalKeBerapa = totalSoal;
+  updateBar();
+  show("finish");
+  suaraFanfare();
+  buatConfetti();
+
+  const persen = Math.round(benar/totalSoal*100);
+  document.getElementById("score").textContent = persen+"%";
+
+  let pesan;
+  if(persen >= 85) pesan = "Luar biasa! Kamu paham perbedaan mendasar ketiga teori ini dengan sangat baik.";
+  else if(persen >= 60) pesan = "Bagus! Coba review lagi bagian yang meleset, biar makin mantap.";
+  else pesan = "Yuk pelajari lagi ketiga teori ini — coba ulangi buat lihat progresmu.";
+  document.getElementById("message").textContent = pesan;
+}
+
+function buatConfetti(){
+  const warna = ["#f472b6","#7dd3fc","#facc15","#4ade80","#a78bfa"];
+  for(let i=0;i<40;i++){
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*100+"vw";
+    c.style.background = warna[Math.floor(Math.random()*warna.length)];
+    c.style.animationDuration = (2.5+Math.random()*2)+"s";
+    c.style.animationDelay = (Math.random()*0.6)+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 5000);
+  }
+}
+</script>
+</body>
+</html>
