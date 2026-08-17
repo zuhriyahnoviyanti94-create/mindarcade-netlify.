@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindArcade - Psychology Development Journey</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#10172a,#312e81);color:white}
+.app{max-width:850px;margin:auto;padding:24px}.brand{font-size:24px;font-weight:bold}.brand span{color:#7dd3fc}
+.hero{margin-top:20px;padding:28px;border-radius:26px;background:#ffffff14;border:1px solid #ffffff22}
+h1{font-size:42px;margin:10px 0}.muted{color:#dbeafe;line-height:1.6}
+.bar{height:8px;background:#ffffff22;border-radius:20px;overflow:hidden;margin:20px 0}.fill{height:100%;width:25%;background:#7dd3fc;transition:.4s}
+.screen{display:none}.active{display:block}.card{background:white;color:#172033;padding:24px;border-radius:22px;margin-top:18px}
+.visual{height:170px;border-radius:18px;background:linear-gradient(135deg,#dff6ff,#ede9fe);display:flex;align-items:center;justify-content:center;font-size:75px}
+button{border:0;border-radius:14px;padding:14px 18px;margin:7px;cursor:pointer;font-weight:bold}
+.start{background:#172033;color:white}.tile{background:#f1f5f9;color:#172033;border:2px solid #cbd5e1}.choice{display:block;width:100%;text-align:left;background:#f8fafc;border:2px solid #e2e8f0}.correct{background:#dcfce7!important;border-color:#16a34a!important}.wrong{background:#fee2e2!important;border-color:#dc2626!important}
+.feedback{margin-top:14px;padding:14px;background:#eff6ff;border-radius:14px;line-height:1.5}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.slot{padding:18px;border:2px dashed #cbd5e1;border-radius:12px;text-align:center}
+.score{text-align:center;font-size:64px;font-weight:bold}
+@media(max-width:600px){h1{font-size:32px}.slots{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="brand">🧠 Mind<span>Arcade</span></div>
+<div class="hero">
+<small>INTERACTIVE LEARNING DEMO</small>
+<h1>Human Development Journey</h1>
+<p class="muted">Contoh bagaimana satu materi Psikologi Perkembangan diubah menjadi pengalaman belajar: visual → puzzle → kasus → feedback.</p>
+<div class="bar"><div class="fill" id="fill"></div></div>
+
+<section id="intro" class="screen active">
+<div class="card"><div class="visual">👶 → 🧒 → 🧑 → 👴</div>
+<h2>Mission 1 — Kenali Perjalanan Perkembangan</h2>
+<p class="muted">Kamu akan menyelesaikan satu mini puzzle dan satu kasus psikologi. Tidak hanya menjawab soal.</p>
+<button class="start" onclick="start()">Mulai Journey →</button></div>
+</section>
+
+<section id="puzzle" class="screen">
+<div class="card"><h2>🧩 Timeline Puzzle</h2>
+<p class="muted">Klik tahap perkembangan dalam urutan yang benar.</p>
+<div id="tiles"></div><div class="slots" id="slots"></div><div id="pmsg"></div>
+<button class="start" id="next" disabled onclick="caseGame()">Lanjut ke Case Detective →</button></div>
+</section>
+
+<section id="case" class="screen">
+<div class="card"><div class="visual">👩‍🍼</div>
+<h2>🔎 Case Detective</h2>
+<p class="muted"><b>Rani, 2 tahun</b> menangis ketika ibunya meninggalkan ruangan. Saat ibunya kembali dan memeluknya, Rani perlahan tenang dan kembali bermain.</p>
+<h3>Konsep yang paling sesuai?</h3>
+<div id="choices"></div><div id="feedback"></div>
+<button class="start" id="finish" disabled onclick="finish()">Lihat Hasil →</button></div>
+</section>
+
+<section id="result" class="screen">
+<div class="card"><div class="visual">🏆</div><h2>Development Explorer</h2><div class="score" id="score"></div>
+<p class="muted">Kamu baru saja mencoba satu contoh format MindArcade: visual learning, mini game, case-based learning, feedback, dan skor.</p>
+<button class="start" onclick="location.reload()">Main Lagi</button></div>
+</section>
+</div></div>
+
+<script>
+const stages=["Prenatal","Bayi","Anak","Remaja","Dewasa","Lansia"];
+let chosen=[],score=0;
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function start(){
+document.getElementById("fill").style.width="45%";show("puzzle");
+let a=[...stages].sort(()=>Math.random()-.5),t=document.getElementById("tiles");t.innerHTML="";
+a.forEach(s=>{let b=document.createElement("button");b.className="tile";b.textContent=s;b.onclick=()=>pick(s,b);t.appendChild(b)});
+document.getElementById("slots").innerHTML=stages.map((_,i)=>'<div class="slot" id="s'+i+'">Urutan '+(i+1)+'</div>').join("");
+}
+function pick(s,b){
+if(chosen.includes(s))return;chosen.push(s);b.disabled=true;document.getElementById("s"+(chosen.length-1)).textContent=s;
+if(chosen.length===6){
+let ok=chosen.every((x,i)=>x===stages[i]),m=document.getElementById("pmsg");
+if(ok){score+=50;m.innerHTML='<div class="feedback">✅ Tepat! Kamu memahami urutan perkembangan manusia.</div>';document.getElementById("next").disabled=false}
+else{m.innerHTML='<div class="feedback">💡 Belum tepat. Urutannya dimulai dari Prenatal lalu Bayi, Anak, Remaja, Dewasa, Lansia. Coba ulangi.</div>';setTimeout(start,1200)}
+}}
+function caseGame(){
+document.getElementById("fill").style.width="75%";show("case");
+let opts=["Attachment","Operant Conditioning","Identity vs Role Confusion","Object Permanence"],c=document.getElementById("choices");c.innerHTML="";
+opts.forEach((x,i)=>{let b=document.createElement("button");b.className="choice";b.textContent=x;b.onclick=()=>answer(i,b);c.appendChild(b)})
+}
+function answer(i,b){
+document.querySelectorAll(".choice").forEach(x=>x.disabled=true);let f=document.getElementById("feedback");
+if(i===0){score+=50;b.classList.add("correct");f.innerHTML='<div class="feedback">✅ Benar! Kasus ini berkaitan dengan <b>attachment</b>, yaitu ikatan emosional anak dengan pengasuh.</div>'}
+else{b.classList.add("wrong");document.querySelectorAll(".choice")[0].classList.add("correct");f.innerHTML='<div class="feedback">💡 Jawaban yang paling tepat adalah <b>Attachment</b>. Fokus kasusnya adalah respons anak terhadap perpisahan dan kembalinya pengasuh.</div>'}
+document.getElementById("finish").disabled=false;
+}
+function finish(){document.getElementById("fill").style.width="100%";document.getElementById("score").textContent=score+"%";show("result")}
+</script>
+</body>
+</html>

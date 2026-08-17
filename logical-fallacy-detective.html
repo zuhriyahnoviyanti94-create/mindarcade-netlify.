@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindArcade — Logical Fallacy Detective FREE</title>
+<style>
+:root{--bg:#0b1020;--panel:#151d35;--card:#fff;--text:#172033;--muted:#64748b;--accent:#7dd3fc}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(135deg,#0b1020,#172554,#312e81);min-height:100vh;color:#fff}.wrap{max-width:880px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:23px;font-weight:800}.brand span{color:#7dd3fc}.free{font-size:12px;font-weight:800;padding:7px 11px;border:1px solid #7dd3fc55;border-radius:99px;color:#7dd3fc}.shell{background:#ffffff12;border:1px solid #ffffff20;border-radius:28px;padding:22px;box-shadow:0 24px 70px #0006}.progress{height:7px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:16px 0}.fill{height:100%;width:20%;background:#7dd3fc;transition:.4s}.screen{display:none}.screen.active{display:block}.hero{background:linear-gradient(135deg,#172554,#312e81);border-radius:22px;padding:28px;min-height:350px;display:flex;flex-direction:column;justify-content:center}.kicker{font-size:12px;letter-spacing:1.5px;font-weight:800;color:#7dd3fc}.hero h1{font-size:clamp(34px,7vw,58px);line-height:1;margin:9px 0}.hero p{max-width:650px;line-height:1.65;color:#dbeafe}.btn{border:0;border-radius:14px;padding:14px 19px;font-weight:800;cursor:pointer;background:#fff;color:#172033;margin-top:10px}.game{background:#fff;color:var(--text);border-radius:22px;padding:24px}.scene{background:linear-gradient(135deg,#e0f2fe,#ede9fe);border-radius:18px;padding:20px;min-height:230px;display:flex;flex-direction:column;justify-content:center;gap:13px}.person{display:flex;align-items:flex-end;gap:10px;animation:in .5s ease}.person.right{justify-content:flex-end}@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.avatar{font-size:46px}.bubble{background:#fff;border-radius:18px;padding:13px 16px;max-width:75%;box-shadow:0 5px 20px #33415518;line-height:1.45}.right .bubble{background:#dbeafe}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}.choice{padding:14px;text-align:left;border:2px solid #e2e8f0;background:#f8fafc;border-radius:14px;cursor:pointer;color:var(--text)}.choice:hover{border-color:#38bdf8}.choice.correct{background:#dcfce7;border-color:#16a34a}.choice.wrong{background:#fee2e2;border-color:#dc2626}.feedback{margin-top:14px;padding:15px;border-radius:14px;background:#eff6ff;line-height:1.55}.next{display:none;background:#172033;color:#fff}.result{text-align:center;padding:28px}.score{font-size:60px;font-weight:900;margin:8px}.small{color:#64748b;line-height:1.6}@media(max-width:600px){.choices{grid-template-columns:1fr}.bubble{max-width:84%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">🧠 Mind<span>Arcade</span></div><div class="free">FREE MINI GAME</div></div>
+  <div class="shell">
+    <div class="progress"><div class="fill" id="fill"></div></div>
+
+    <section class="screen active" id="intro">
+      <div class="hero">
+        <div class="kicker">CRITICAL THINKING</div>
+        <h1>Logical Fallacy Detective</h1>
+        <p>Bisakah kamu menemukan kesalahan berpikir dalam percakapan sehari-hari? Ikuti cerita, baca argumennya, lalu pilih jenis logical fallacy yang paling tepat.</p>
+        <p>🎮 Mini game gratis dari MindArcade.</p>
+        <button class="btn" onclick="begin()">Mulai Detective →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="game">
+      <div class="game">
+        <div class="kicker" id="round">CASE 1</div>
+        <h2 id="title">Perhatikan percakapannya</h2>
+        <div class="scene" id="scene"></div>
+        <div id="question"></div>
+        <div id="feedback"></div>
+        <button class="btn next" id="next">Lanjut →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="finish">
+      <div class="game result">
+        <div style="font-size:60px">🕵️</div>
+        <div class="kicker">MISSION COMPLETE</div>
+        <h2>Logical Fallacy Detective</h2>
+        <div class="score" id="score">0%</div>
+        <p class="small" id="message"></p>
+        <button class="btn" onclick="location.reload()">Main Lagi</button>
+        <p class="small" style="margin-top:22px">Ingin belajar lebih banyak? Cari challenge Logical Fallacy lainnya di MindArcade.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const cases=[
+ {a:"🧑‍🎓",b:"👩‍🎓",sa:"Menurutku sekolah sebaiknya menyediakan lebih banyak waktu membaca.",sb:"Pendapatmu tidak perlu didengar. Nilaimu saja sering jelek.",q:"Kesalahan berpikir apa yang terjadi?",opts:["Ad hominem","Strawman","False dilemma","Slippery slope"],ans:0,exp:"Ad hominem terjadi ketika seseorang menyerang pribadi lawan, bukan menjawab isi argumennya."},
+ {a:"🧑",b:"👩",sa:"Menurutku penggunaan ponsel di kelas perlu diatur.",sb:"Jadi kamu ingin melarang semua teknologi di sekolah?",q:"Kesalahan berpikir apa yang terjadi?",opts:["False cause","Strawman","Appeal to popularity","Ad hominem"],ans:1,exp:"Strawman terjadi ketika argumen seseorang diubah menjadi versi yang lebih ekstrem atau lemah lalu diserang."},
+ {a:"🧑‍🏫",b:"🧑‍🎓",sa:"Kalau kita mengizinkan siswa membawa ponsel sekali, nanti semua siswa akan terus bermain, nilai turun, lalu sekolah pasti gagal total.",sb:"Apakah semua akibat itu pasti terjadi?",q:"Kesalahan berpikir apa yang terjadi?",opts:["Slippery slope","Ad hominem","Circular reasoning","Appeal to authority"],ans:0,exp:"Slippery slope menganggap satu langkah kecil pasti membawa rangkaian akibat buruk tanpa bukti yang cukup."}
+];
+
+let i=0,correct=0;
+const fill=document.getElementById("fill"),scene=document.getElementById("scene"),question=document.getElementById("question"),feedback=document.getElementById("feedback"),next=document.getElementById("next");
+
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function begin(){i=0;correct=0;show("game");render()}
+function render(){
+ fill.style.width=((i+1)/(cases.length+1)*100)+"%";
+ const c=cases[i];
+ document.getElementById("round").textContent="CASE "+(i+1)+" / "+cases.length;
+ document.getElementById("title").textContent="Perhatikan percakapannya";
+ scene.innerHTML='<div class="person"><div class="avatar">'+c.a+'</div><div class="bubble">'+c.sa+'</div></div><div class="person right"><div class="bubble">'+c.sb+'</div><div class="avatar">'+c.b+'</div></div>';
+ question.innerHTML='<p style="margin-top:18px"><b>'+c.q+'</b></p><div class="choices">'+c.opts.map((o,n)=>'<button class="choice" onclick="answer('+n+',this)">'+String.fromCharCode(65+n)+'. '+o+'</button>').join("")+'</div>';
+ feedback.innerHTML="";next.style.display="none";next.onclick=nextCase;
+}
+function answer(n,btn){
+ const c=cases[i];document.querySelectorAll(".choice").forEach(x=>x.disabled=true);
+ if(n===c.ans){correct++;btn.classList.add("correct");feedback.innerHTML='<div class="feedback">✅ <b>Tepat!</b><br>'+c.exp+'</div>'}
+ else{btn.classList.add("wrong");document.querySelectorAll(".choice")[c.ans].classList.add("correct");feedback.innerHTML='<div class="feedback">💡 <b>Belum tepat.</b><br>Jawaban yang benar adalah <b>'+c.opts[c.ans]+'</b>.<br>'+c.exp+'</div>'}
+ next.textContent=i===cases.length-1?"Lihat hasil →":"Lanjut ke kasus berikutnya →";next.style.display="inline-block";
+}
+function nextCase(){i++;if(i<cases.length)render();else finish()}
+function finish(){
+ fill.style.width="100%";show("finish");let pct=Math.round(correct/cases.length*100);document.getElementById("score").textContent=pct+"%";
+ document.getElementById("message").textContent=pct===100?"Excellent! Kamu berhasil mengenali semua pola kesesatan berpikir.":"Good job! Coba ulangi dan perhatikan alasan di balik setiap jawaban. Memahami fallacy lebih penting daripada sekadar menghafal namanya.";
+}
+</script>
+</body>
+</html>
