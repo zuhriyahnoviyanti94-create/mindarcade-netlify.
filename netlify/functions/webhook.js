@@ -31,8 +31,14 @@ function escapeForFormula(s) {
   return String(s).replace(/'/g, "\\'");
 }
 
+function ekstrakNamaBabUntukPrefix(judulLengkap) {
+  const parts = String(judulLengkap || "").split(/—|–|-{1,2}/);
+  return parts[parts.length - 1].trim();
+}
+
 function buatKodeUntukProduk(namaProduk) {
-  const prefix = (String(namaProduk).replace(/[^a-zA-Z]/g, "").substring(0, 3).toUpperCase()) || "MND";
+  const bab = ekstrakNamaBabUntukPrefix(namaProduk);
+  const prefix = (String(bab).replace(/[^a-zA-Z]/g, "").substring(0, 3).toUpperCase()) || "MND";
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `MND-${prefix}-${random}`;
 }
