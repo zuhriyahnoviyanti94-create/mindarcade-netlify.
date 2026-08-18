@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindArcade — Belajar Seru Kelas 3 SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#fef3c7;--bg2:#fecdd3;--accent:#fb923c;--accent2:#f472b6;--text:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Baloo 2',Arial,sans-serif;background:linear-gradient(135deg,#fde68a,#fbcfe8,#bfdbfe);min-height:100vh;color:#172033;overflow-x:hidden;position:relative}
+.blob{position:fixed;border-radius:50%;filter:blur(50px);opacity:.5;z-index:0;animation:float 8s ease-in-out infinite}
+.blob1{width:260px;height:260px;background:#fbbf24;top:-70px;left:-70px}
+.blob2{width:200px;height:200px;background:#f472b6;bottom:-50px;right:-50px;animation-delay:2s}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.08)}}
+.wrap{max-width:860px;margin:auto;padding:18px;position:relative;z-index:1}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brand{font-size:24px;font-weight:800;color:#7c3aed}
+.brand span{color:#f472b6}
+.locktag{font-size:11px;font-weight:800;padding:7px 12px;border-radius:99px;color:#fff;background:#fb923c}
+.bar{height:12px;background:#ffffff70;border-radius:20px;overflow:hidden;margin-bottom:16px;border:2px solid #fff}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,#fb923c,#f472b6);transition:width .5s ease}
+.shell{background:#ffffffcc;border:3px solid #fff;border-radius:28px;padding:20px;box-shadow:0 10px 30px #0000001a}
+.screen{display:none;animation:fadein .5s ease}
+.screen.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#loginBox{max-width:420px;margin:14px auto;background:#fff;color:var(--text);padding:26px;border-radius:24px;text-align:center;border:3px solid #fde68a}
+#loginBox h1{color:#ea580c;font-size:20px;margin-bottom:4px}
+#loginBox p{color:#64748b;font-size:14px}
+.input{width:100%;padding:13px;margin:8px 0;border-radius:14px;border:2px solid #fde68a;font-size:16px;font-family:inherit}
+#pesanLogin{margin-top:12px;font-weight:bold;font-size:14px}
+.hero{text-align:center;padding:14px 6px}
+.hero .icon{font-size:70px;animation:bounce 1.8s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-16px) rotate(5deg)}}
+.hero h1{font-size:clamp(22px,6vw,32px);margin:8px 0 6px;color:#7c3aed}
+.hero p{color:#475569;line-height:1.6;max-width:600px;margin:auto;font-size:15px}
+.legend{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.legend span{background:#fff7ed;border:2px solid #fed7aa;padding:8px 13px;border-radius:99px;font-size:13px;font-weight:700;color:#c2410c}
+.btn{border:0;border-radius:16px;padding:15px 22px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#fb923c,#f472b6);color:#fff;margin-top:16px;font-size:16px;transition:transform .15s ease;width:100%;font-family:inherit}
+.btn:active{transform:scale(.95)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.chapter-intro{text-align:center;padding:30px 10px}
+.chapter-intro .badge{display:inline-block;font-size:13px;font-weight:800;padding:8px 16px;border-radius:99px;margin-bottom:12px;background:#fff7ed;color:#c2410c;border:2px solid #fed7aa}
+.chapter-intro .icon{font-size:64px;animation:popin .5s ease}
+@keyframes popin{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.chapter-intro h2{font-size:24px;margin:10px 0;color:#7c3aed}
+.chapter-intro p{color:#475569;line-height:1.6;max-width:500px;margin:auto}
+.game{background:#fff;color:var(--text);border-radius:22px;padding:20px;border:3px solid #fde68a}
+.kicker{font-size:12px;letter-spacing:.5px;font-weight:800;color:#ea580c}
+.scene{background:linear-gradient(135deg,#fff7ed,#fce7f3);border-radius:18px;padding:20px;min-height:140px;display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px;flex-direction:column}
+.scene .figure{font-size:54px;animation:entrance .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes entrance{0%{transform:translateY(30px) scale(.5);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+.dialog{width:100%;display:flex;flex-direction:column;gap:12px}
+.bubble-row{display:flex;align-items:flex-end;gap:10px;animation:entrance .5s ease}
+.bubble-row.right{justify-content:flex-end}
+.avatar{font-size:40px;flex-shrink:0}
+.bubble{background:#fff;border-radius:16px;padding:11px 14px;max-width:78%;box-shadow:0 4px 14px #33415522;line-height:1.4;font-size:14px;text-align:left}
+.bubble-row.right .bubble{background:#fce7f3}
+.voice-btn{align-self:center;margin-top:6px;background:#ea580c;color:#fff;border:0;border-radius:99px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.voice-btn:active{transform:scale(.96)}
+.kasusbox{width:100%;text-align:left;animation:entrance .5s ease}
+.kasus-label{font-size:11px;font-weight:800;color:#ea580c;letter-spacing:.5px;margin-bottom:6px}
+.kasus-text{background:#fff;border-radius:14px;padding:14px;line-height:1.55;font-size:14px;box-shadow:0 4px 14px #33415522}
+.videobox{width:100%;text-align:center}
+.videobox .videolabel{font-size:11px;font-weight:800;color:#ea580c;letter-spacing:.5px;margin-bottom:10px}
+.adegan-panel{background:#fff;border-radius:16px;padding:22px 16px;box-shadow:0 6px 20px #33415522;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.adegan-emoji{font-size:46px;animation:entrance .5s ease}
+.adegan-teks{font-size:14px;line-height:1.5;color:var(--text)}
+.adegan-progress{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.adegan-dot{width:8px;height:8px;border-radius:50%;background:#fed7aa}
+.adegan-dot.active{background:#ea580c}
+.video-controls{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.video-controls button{background:#ea580c;color:#fff;border:0;border-radius:99px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.video-controls button.secondary{background:#f1f5f9;color:var(--text)}
+.question{font-size:17px;font-weight:800;margin:14px 0 6px;line-height:1.5;color:#172033}
+.choices{display:grid;gap:10px;margin-top:12px}
+.choices.hidden-q{display:none}
+.choice{padding:14px;text-align:left;border:2px solid #fde68a;background:#fffbeb;border-radius:16px;cursor:pointer;color:var(--text);font-size:15px;display:flex;gap:10px;align-items:center;transition:transform .1s ease;width:100%;font-family:inherit}
+.choice:active{transform:scale(.98)}
+.choice .lt{background:#fed7aa;color:#c2410c;font-weight:800;min-width:28px;height:28px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.choice.correct{background:#dcfce7;border-color:#16a34a;animation:pop .35s ease}
+.choice.correct .lt{background:#16a34a;color:#fff}
+.choice.wrong{background:#fee2e2;border-color:#f87171;animation:shake .4s ease}
+.choice.wrong .lt{background:#f87171;color:#fff}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.feedback{margin-top:14px;padding:15px;border-radius:16px;background:#fef9c3;line-height:1.55;animation:fadein .3s ease}
+.next{display:none;background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+.puzzle-tiles{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tile{padding:12px 14px;background:#fef9c3;border:2px solid #fde68a;border-radius:14px;cursor:pointer;font-size:14px;font-weight:700;color:var(--text);transition:transform .1s ease;font-family:inherit}
+.tile:active{transform:scale(.96)}
+.tile:disabled{opacity:.35;cursor:not-allowed}
+.puzzle-slots{display:grid;gap:8px;margin-top:16px}
+.slot{padding:13px;border:2px dashed #fdba74;border-radius:14px;text-align:center;font-size:14px;color:#c2740c99;min-height:20px;font-weight:600}
+.slot.filled{border-style:solid;border-color:#ea580c;background:#fff7ed;color:var(--text);font-weight:700;animation:pop .3s ease}
+.puzzle-msg{margin-top:14px}
+.result{text-align:center;padding:16px}
+.trophy{font-size:68px;animation:bounce 1.8s ease-in-out infinite}
+.score{font-size:54px;font-weight:900;margin:6px 0;color:#7c3aed}
+.small{color:#64748b;line-height:1.6}
+.confetti{position:fixed;top:-20px;width:10px;height:15px;z-index:5;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.sound-toggle{position:fixed;bottom:16px;right:16px;background:#ffffffcc;border:2px solid #fde68a;color:#c2410c;border-radius:99px;padding:9px 14px;font-size:13px;cursor:pointer;z-index:6;font-family:inherit;font-weight:700}
+@media(max-width:600px){.scene{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Suara: ON</button>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">🧠 Mind<span>Arcade</span></div>
+    <div class="locktag">🔒 15 KUIS SERU</div>
+  </div>
+  <div class="bar" id="topBar" style="display:none"><div class="fill" id="fill"></div></div>
+  <div class="shell">
+    <section class="screen active" id="loginScreen">
+      <div id="loginBox">
+        <h1>🔒 Belajar Seru Kelas 3 SD</h1>
+        <p>Masukkan Kode Akses ya!</p>
+        <input class="input" id="kode" placeholder="Contoh: MND-XXX-XXXXXX">
+        <input class="input" id="email" placeholder="Email pembeli">
+        <button class="btn" onclick="aktivasi()" id="btnAktivasi">🚀 Ayo Mulai!</button>
+        <div id="pesanLogin"></div>
+      </div>
+    </section>
+    <section class="screen" id="intro">
+      <div class="hero">
+        <div class="icon">🦋📚</div>
+        <h1>Belajar Seru Kelas 3 SD</h1>
+        <p>Ayo main sambil belajar Matematika, Bahasa Indonesia, IPA, dan IPS lewat cerita-cerita seru!</p>
+        <div class="legend"><span>🔢 Matematika</span><span>📖 B. Indonesia</span><span>🦋 IPA</span><span>🗺️ IPS</span></div>
+        <button class="btn" onclick="mulai()">Ayo Main! →</button>
+      </div>
+    </section>
+    <section class="screen" id="chapterIntro">
+      <div class="chapter-intro">
+        <div class="badge" id="chapBadge"></div>
+        <div class="icon" id="chapIcon"></div>
+        <h2 id="chapTitle"></h2>
+        <p id="chapDesc"></p>
+        <button class="btn" onclick="mulaiSoalBab()">Ayo Coba! →</button>
+      </div>
+    </section>
+    <section class="screen" id="game">
+      <div class="game">
+        <div class="kicker" id="round"></div>
+        <div class="scene" id="scene"></div>
+        <div class="question" id="question"></div>
+        <div class="choices" id="choices"></div>
+        <div id="feedback"></div>
+        <button class="btn next" id="next">Lanjut →</button>
+      </div>
+    </section>
+    <section class="screen" id="finish">
+      <div class="game result">
+        <div class="trophy">🏆</div>
+        <div class="kicker">HORE, SELESAI!</div>
+        <h2 style="color:#7c3aed">Juara Kelas 3!</h2>
+        <div class="score" id="score">0%</div>
+        <p class="small" id="message"></p>
+        <button class="btn" onclick="location.reload()">🔄 Main Lagi</button>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+const NAMA_PRODUK_INI = "Belajar Seru Kelas 3 SD";
+
+let soundOn=true, audioCtx=null;
+function getCtx(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById("soundToggle").textContent=soundOn?"🔊 Suara: ON":"🔇 Suara: OFF";
+  if(!soundOn && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+function nada(freq,durasi=0.15,tipe='sine',delay=0,volume=0.16){
+  if(!soundOn) return;
+  try{
+    const ctx=getCtx();const osc=ctx.createOscillator();const gain=ctx.createGain();
+    osc.type=tipe;osc.frequency.value=freq;
+    gain.gain.setValueAtTime(volume,ctx.currentTime+delay);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+delay+durasi);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(ctx.currentTime+delay);osc.stop(ctx.currentTime+delay+durasi);
+  }catch(e){}
+}
+function suaraBenar(){ nada(784,0.1); nada(988,0.12,'sine',0.09); nada(1319,0.15,'sine',0.18); }
+function suaraSalah(){ nada(300,0.2,'sine',0,0.1); nada(250,0.2,'sine',0.1,0.1); }
+function suaraKlik(){ nada(600,0.05,'square',0,0.08); }
+function suaraTile(){ nada(880,0.07,'triangle',0,0.1); }
+function suaraFanfare(){ [523,659,784,1047,1319].forEach((f,i)=>nada(f,0.2,'triangle',i*0.14,0.14)); }
+
+function ucapkan(teks){
+  if(!('speechSynthesis' in window)) return Promise.resolve();
+  return new Promise(resolve=>{
+    try{
+      const u = new SpeechSynthesisUtterance(teks);
+      u.lang='id-ID'; u.rate=0.95; u.pitch=1.1;
+      u.onend=resolve; u.onerror=resolve;
+      window.speechSynthesis.speak(u);
+    }catch(e){ resolve(); }
+  });
+}
+async function putarDialog(s){
+  if(!soundOn || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  await ucapkan(s.sa);
+  await ucapkan(s.sb);
+}
+
+async function apiCall(action, payload) {
+  const res = await fetch("/.netlify/functions/api", { method:"POST", body: JSON.stringify(Object.assign({action:action},payload)) });
+  return await res.json();
+}
+async function aktivasi(){
+  const kode=document.getElementById("kode").value.trim();
+  const email=document.getElementById("email").value.trim();
+  const pesan=document.getElementById("pesanLogin");
+  if(kode===""||email===""){ pesan.innerHTML="⚠️ Isi kode dan email dulu ya"; return; }
+  const btn=document.getElementById("btnAktivasi");
+  btn.disabled=true; btn.innerHTML="Sebentar ya..."; pesan.innerHTML="";
+  try{
+    const res=await apiCall("cekKodeAkses",{kode,email});
+    if(res.error){ pesan.innerHTML="❌ Error server: "+res.error; btn.disabled=false; btn.innerHTML="🚀 Ayo Mulai!"; return; }
+    if(!res.sukses){ pesan.innerHTML=res.pesan||"❌ Kode tidak valid"; btn.disabled=false; btn.innerHTML="🚀 Ayo Mulai!"; return; }
+    const produkDiKode=String(res.produk||"").trim();
+    if(produkDiKode!==NAMA_PRODUK_INI){
+      pesan.innerHTML="❌ Kode ini bukan untuk '"+NAMA_PRODUK_INI+"'. Kode kamu untuk: "+produkDiKode;
+      btn.disabled=false; btn.innerHTML="🚀 Ayo Mulai!"; return;
+    }
+    document.getElementById("loginScreen").classList.remove("active");
+    document.getElementById("topBar").style.display="block";
+    getCtx(); show("intro");
+  }catch(err){
+    pesan.innerHTML="❌ Gagal konek ke server: "+err.message;
+    btn.disabled=false; btn.innerHTML="🚀 Ayo Mulai!";
+  }
+}
+
+const BAB = [{"id": "mtk", "badge": "🔢 MATEMATIKA", "icon": "🔢🍕", "judul": "Ayo Berhitung!", "deskripsi": "Yuk belajar perkalian, pembagian, dan pecahan!", "soal": [{"tipe": "normal", "figur": "✖️", "pertanyaan": "6 x 4 = ...", "opsi": ["24", "20", "28", "18"], "jawaban": 0, "penjelasan": "6 x 4 = 24."}, {"tipe": "normal", "figur": "➗", "pertanyaan": "20 : 4 = ...", "opsi": ["5", "4", "6", "8"], "jawaban": 0, "penjelasan": "20 dibagi 4 sama dengan 5."}, {"tipe": "kasus", "teksKasus": "Sebuah pizza dipotong menjadi 8 bagian sama besar. Doni makan 3 potong.", "pertanyaan": "Berapa pecahan pizza yang dimakan Doni?", "opsi": ["3/8", "8/3", "3/5", "5/8"], "jawaban": 0, "penjelasan": "Doni makan 3 dari 8 potong, jadi pecahannya 3/8."}, {"tipe": "normal", "figur": "⚖️", "pertanyaan": "Satuan untuk mengukur berat benda adalah...", "opsi": ["Kilogram", "Meter", "Detik", "Liter"], "jawaban": 0, "penjelasan": "Kilogram adalah satuan untuk mengukur berat."}]}, {"id": "bindo", "badge": "📖 B. INDONESIA", "icon": "📖🏆", "judul": "Ayo Berbahasa!", "deskripsi": "Yuk kenalan sama jenis kalimat dan cerita inspiratif!", "soal": [{"tipe": "normal", "figur": "📢", "pertanyaan": "Kalimat 'Tolong ambilkan buku itu!' adalah kalimat...", "opsi": ["Perintah", "Tanya", "Berita", "Seru kesedihan"], "jawaban": 0, "penjelasan": "Kalimat yang meminta seseorang melakukan sesuatu disebut kalimat perintah."}, {"tipe": "normal", "figur": "📏", "pertanyaan": "Lawan kata dari 'tinggi' adalah...", "opsi": ["Rendah", "Besar", "Kuat", "Cepat"], "jawaban": 0, "penjelasan": "Lawan kata 'tinggi' adalah 'rendah'."}, {"tipe": "video-kasus", "adegan": [{"emoji": "👦📚", "teks": "Rio rajin membaca buku setiap hari."}, {"emoji": "🧠✨", "teks": "Karena rajin membaca, pengetahuan Rio semakin bertambah."}, {"emoji": "🏆", "teks": "Rio pun menjadi juara lomba cerdas cermat di sekolahnya!"}], "pertanyaan": "Mengapa Rio bisa menjadi juara lomba cerdas cermat?", "opsi": ["Karena rajin membaca buku", "Karena beruntung saja", "Karena tidak belajar", "Karena tidur terus"], "jawaban": 0, "penjelasan": "Rio menjadi juara karena kebiasaannya rajin membaca buku."}, {"tipe": "normal", "figur": "👥", "pertanyaan": "Kata 'kami' digunakan untuk menyebut...", "opsi": ["Diri sendiri dan orang lain (tanpa lawan bicara)", "Satu orang saja", "Lawan bicara", "Benda mati"], "jawaban": 0, "penjelasan": "'Kami' digunakan untuk diri sendiri bersama orang lain, tanpa termasuk lawan bicara."}]}, {"id": "ipa", "badge": "🦋 IPA", "icon": "🐛🦋", "judul": "Ayo Mengenal Alam!", "deskripsi": "Yuk kenalan sama daur hidup hewan dan habitatnya!", "soal": [{"tipe": "normal", "figur": "🐛➡️🦋", "pertanyaan": "Proses perubahan bentuk kupu-kupu dari telur hingga dewasa disebut...", "opsi": ["Metamorfosis", "Fotosintesis", "Respirasi", "Adaptasi"], "jawaban": 0, "penjelasan": "Metamorfosis adalah proses perubahan bentuk tubuh hewan, seperti kupu-kupu."}, {"tipe": "video-kasus", "adegan": [{"emoji": "🥚", "teks": "Semua bermula dari telur kecil di daun."}, {"emoji": "🐛", "teks": "Telur menetas menjadi ulat yang rakus makan daun."}, {"emoji": "🦋", "teks": "Setelah menjadi kepompong, ulat berubah menjadi kupu-kupu yang indah!"}], "pertanyaan": "Urutan yang benar dari daur hidup kupu-kupu adalah...", "opsi": ["Telur - ulat - kepompong - kupu-kupu", "Kupu-kupu - telur - ulat", "Ulat - kupu-kupu - telur", "Kepompong - telur - ulat"], "jawaban": 0, "penjelasan": "Daur hidup kupu-kupu dimulai dari telur, ulat, kepompong, lalu kupu-kupu."}, {"tipe": "normal", "figur": "☀️", "pertanyaan": "Matahari adalah sumber energi utama berupa...", "opsi": ["Cahaya dan panas", "Suara", "Angin saja", "Air saja"], "jawaban": 0, "penjelasan": "Matahari memberikan energi berupa cahaya dan panas."}, {"tipe": "normal", "figur": "🐠🏞️", "pertanyaan": "Tempat tinggal alami suatu hewan disebut...", "opsi": ["Habitat", "Kandang", "Sangkar", "Akuarium"], "jawaban": 0, "penjelasan": "Habitat adalah tempat tinggal alami suatu hewan di alam."}]}, {"id": "ips", "badge": "🗺️ IPS", "icon": "🗺️🎭", "judul": "Ayo Mengenal Indonesia!", "deskripsi": "Yuk kenalan sama budaya dan peta Indonesia!", "soal": [{"tipe": "normal", "figur": "🇮🇩🎉", "pertanyaan": "Indonesia memiliki banyak suku dan budaya berbeda. Ini menunjukkan Indonesia adalah negara yang...", "opsi": ["Beragam / majemuk", "Sama semua", "Kecil", "Sepi penduduk"], "jawaban": 0, "penjelasan": "Indonesia terkenal dengan keberagaman suku dan budayanya."}, {"tipe": "kasus", "teksKasus": "Pak Made berasal dari Bali dan pandai menari tari Kecak.", "pertanyaan": "Tari Kecak adalah budaya khas daerah...", "opsi": ["Bali", "Papua", "Aceh", "Kalimantan"], "jawaban": 0, "penjelasan": "Tari Kecak adalah tarian tradisional khas Bali."}, {"tipe": "normal", "figur": "🗺️", "pertanyaan": "Gambaran permukaan bumi yang digambar di atas kertas disebut...", "opsi": ["Peta", "Globe", "Lukisan", "Buku"], "jawaban": 0, "penjelasan": "Peta adalah gambaran permukaan bumi di atas kertas."}]}];
+
+let babIndex=0, soalIndex=0, benar=0, totalSoal=BAB.reduce((a,b)=>a+b.soal.length,0), soalKeBerapa=0;
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); }
+function updateBar(){ document.getElementById("fill").style.width=(soalKeBerapa/totalSoal*100)+"%"; }
+function mulai(){ suaraKlik(); babIndex=0; tampilkanChapterIntro(); }
+function tampilkanChapterIntro(){
+  const bab=BAB[babIndex];
+  document.getElementById("chapBadge").textContent=bab.badge;
+  document.getElementById("chapIcon").textContent=bab.icon;
+  document.getElementById("chapTitle").textContent=bab.judul;
+  document.getElementById("chapDesc").textContent=bab.deskripsi;
+  show("chapterIntro");
+}
+
+let puzzleUrutanBenar=[], puzzleTerpilih=[];
+function mulaiPuzzleBab(){
+  suaraKlik();
+  const bab=BAB[babIndex];
+  puzzleUrutanBenar=bab.puzzleUrutan; puzzleTerpilih=[];
+  document.getElementById("puzzleKicker").textContent=bab.judul.toUpperCase();
+  document.getElementById("puzzleDesc").textContent=bab.puzzleDesc;
+  document.getElementById("puzzleMsg").innerHTML="";
+  document.getElementById("puzzleNext").style.display="none";
+  const tilesEl=document.getElementById("puzzleTiles"); tilesEl.innerHTML="";
+  const acak=[...puzzleUrutanBenar].sort(()=>Math.random()-0.5);
+  acak.forEach(teks=>{
+    const b=document.createElement("button"); b.className="tile"; b.textContent=teks;
+    b.onclick=()=>pilihTile(teks,b); tilesEl.appendChild(b);
+  });
+  const slotsEl=document.getElementById("puzzleSlots");
+  slotsEl.innerHTML=puzzleUrutanBenar.map((_,i)=>'<div class="slot" id="pslot'+i+'">Urutan '+(i+1)+'</div>').join("");
+  show("puzzleScreen");
+}
+function pilihTile(teks,btn){
+  if(puzzleTerpilih.includes(teks)) return;
+  suaraTile(); puzzleTerpilih.push(teks); btn.disabled=true;
+  const slot=document.getElementById("pslot"+(puzzleTerpilih.length-1));
+  slot.textContent=teks; slot.classList.add("filled");
+  if(puzzleTerpilih.length===puzzleUrutanBenar.length){
+    const benarSemua=puzzleTerpilih.every((t,i)=>t===puzzleUrutanBenar[i]);
+    const msg=document.getElementById("puzzleMsg");
+    if(benarSemua){
+      suaraBenar();
+      msg.innerHTML='<div class="feedback">✅ <b>Hebat!</b> Urutannya benar semua!</div>';
+      document.getElementById("puzzleNext").style.display="inline-block";
+    } else {
+      suaraSalah();
+      msg.innerHTML='<div class="feedback">💡 Belum pas nih, yuk coba lagi!</div>';
+      setTimeout(()=>mulaiPuzzleBab(),1400);
+    }
+  }
+}
+if(document.getElementById("puzzleNext")) document.getElementById("puzzleNext").onclick=function(){
+  suaraKlik(); soalIndex=0; show("game"); renderSoal();
+};
+
+function renderScene(s){
+  if(s.tipe==="dialog"){
+    return '<div class="dialog">'+
+      '<div class="bubble-row"><div class="avatar">'+s.a+'</div><div class="bubble">'+s.sa+'</div></div>'+
+      '<div class="bubble-row right"><div class="bubble">'+s.sb+'</div><div class="avatar">'+s.b+'</div></div>'+
+      '<button class="voice-btn" id="voiceBtn">🔊 Dengarkan</button>'+
+    '</div>';
+  } else if(s.tipe==="kasus"){
+    return '<div class="kasusbox"><div class="kasus-label">📋 CERITANYA</div><div class="kasus-text">'+s.teksKasus+'</div></div>';
+  } else if(s.tipe==="video-kasus"){
+    return '<div class="videobox">'+
+      '<div class="videolabel">🎬 CERITA BERGAMBAR</div>'+
+      '<div class="adegan-panel" id="adeganPanel"></div>'+
+      '<div class="adegan-progress" id="adeganProgress"></div>'+
+      '<div class="video-controls">'+
+        '<button class="secondary" id="btnUlang">🔁 Putar Ulang</button>'+
+        '<button id="btnLanjutKeSoal" style="display:none">Lanjut ke Soal →</button>'+
+      '</div>'+
+    '</div>';
+  } else {
+    return '<div class="figure">'+s.figur+'</div>';
+  }
+}
+
+async function putarVideoKasus(s){
+  const panel = document.getElementById("adeganPanel");
+  const progress = document.getElementById("adeganProgress");
+  const btnLanjut = document.getElementById("btnLanjutKeSoal");
+  const choicesEl = document.getElementById("choices");
+  choicesEl.classList.add("hidden-q");
+  btnLanjut.style.display = "none";
+  progress.innerHTML = s.adegan.map((_,i)=>'<span class="adegan-dot" id="adot'+i+'"></span>').join("");
+  for(let i=0;i<s.adegan.length;i++){
+    const ad = s.adegan[i];
+    document.querySelectorAll(".adegan-dot").forEach(d=>d.classList.remove("active"));
+    const dot = document.getElementById("adot"+i);
+    if(dot) dot.classList.add("active");
+    panel.innerHTML = '<div class="adegan-emoji">'+ad.emoji+'</div><div class="adegan-teks">'+ad.teks+'</div>';
+    if(soundOn) await ucapkan(ad.teks);
+    else await new Promise(r=>setTimeout(r,1600));
+  }
+  btnLanjut.style.display = "inline-block";
+  btnLanjut.onclick = ()=>{
+    suaraKlik();
+    choicesEl.classList.remove("hidden-q");
+    document.getElementById("btnUlang").style.display="none";
+    btnLanjut.style.display="none";
+  };
+}
+
+function renderSoal(){
+  const bab=BAB[babIndex]; const s=bab.soal[soalIndex];
+  soalKeBerapa=BAB.slice(0,babIndex).reduce((a,b)=>a+b.soal.length,0)+soalIndex;
+  updateBar();
+  document.getElementById("round").textContent=bab.judul.toUpperCase()+" • Soal "+(soalIndex+1)+"/"+bab.soal.length;
+  document.getElementById("scene").innerHTML=renderScene(s);
+  document.getElementById("question").textContent=s.pertanyaan;
+  const choicesEl=document.getElementById("choices"); choicesEl.innerHTML="";
+  choicesEl.classList.remove("hidden-q");
+  s.opsi.forEach((op,i)=>{
+    const b=document.createElement("button"); b.className="choice";
+    b.innerHTML='<span class="lt">'+String.fromCharCode(65+i)+'</span><span>'+op+'</span>';
+    b.onclick=()=>jawab(i,b,s); choicesEl.appendChild(b);
+  });
+  document.getElementById("feedback").innerHTML="";
+  const next=document.getElementById("next"); next.style.display="none"; next.onclick=lanjut;
+  if(s.tipe==="dialog"){
+    const vb = document.getElementById("voiceBtn");
+    if(vb) vb.onclick = ()=>putarDialog(s);
+    putarDialog(s);
+  } else if(s.tipe==="video-kasus"){
+    document.getElementById("btnUlang").onclick = ()=>putarVideoKasus(s);
+    putarVideoKasus(s);
+  }
+}
+function jawab(i,btn,s){
+  suaraKlik();
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+  const fb=document.getElementById("feedback");
+  if(i===s.jawaban){
+    benar++; btn.classList.add("correct"); suaraBenar();
+    fb.innerHTML='<div class="feedback">🎉 <b>Benar sekali!</b><br>'+s.penjelasan+'</div>';
+  } else {
+    btn.classList.add("wrong");
+    document.querySelectorAll(".choice")[s.jawaban].classList.add("correct");
+    suaraSalah();
+    fb.innerHTML='<div class="feedback">😊 <b>Hampir tepat!</b> Jawaban yang benar: <b>'+s.opsi[s.jawaban]+'</b><br>'+s.penjelasan+'</div>';
+  }
+  const bab=BAB[babIndex]; const next=document.getElementById("next");
+  const soalTerakhirDiBab=soalIndex===bab.soal.length-1;
+  const babTerakhir=babIndex===BAB.length-1;
+  next.textContent=(soalTerakhirDiBab&&babTerakhir)?"Lihat Hasil →":(soalTerakhirDiBab?"Lanjut Pelajaran Berikutnya →":"Lanjut →");
+  next.style.display="inline-block";
+}
+function lanjut(){
+  suaraKlik();
+  const bab=BAB[babIndex];
+  if(soalIndex<bab.soal.length-1){ soalIndex++; renderSoal(); }
+  else if(babIndex<BAB.length-1){ babIndex++; tampilkanChapterIntro(); }
+  else { selesai(); }
+}
+function selesai(){
+  soalKeBerapa=totalSoal; updateBar();
+  show("finish"); suaraFanfare(); buatConfetti();
+  const persen=Math.round(benar/totalSoal*100);
+  document.getElementById("score").textContent=persen+"%";
+  let pesan;
+  if(persen>=85) pesan="Wah, hebat sekali! Kamu jago semua pelajarannya! 🌟";
+  else if(persen>=60) pesan="Bagus! Coba lagi biar makin jago ya! 💪";
+  else pesan="Ayo belajar lagi, kamu pasti bisa lebih baik lagi! 😊";
+  document.getElementById("message").textContent=pesan;
+}
+function buatConfetti(){
+  const warna=["#fb923c","#f472b6","#facc15","#4ade80","#60a5fa","#a78bfa"];
+  for(let i=0;i<45;i++){
+    const c=document.createElement("div"); c.className="confetti";
+    c.style.left=Math.random()*100+"vw"; c.style.background=warna[Math.floor(Math.random()*warna.length)];
+    c.style.animationDuration=(2.5+Math.random()*2)+"s"; c.style.animationDelay=(Math.random()*0.6)+"s";
+    document.body.appendChild(c); setTimeout(()=>c.remove(),5000);
+  }
+}
+</script>
+</body>
+</html>

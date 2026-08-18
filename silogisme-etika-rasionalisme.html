@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindArcade — Silogisme, Etika, dan Rasionalisme-Empirisme</title>
+<style>
+:root{--bg1:#0b1020;--bg2:#312e81;--accent:#fb7185;--accent2:#facc15;--text:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,var(--bg1),#1e1b4b,var(--bg2));min-height:100vh;color:#fff;overflow-x:hidden;position:relative}
+.blob{position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;z-index:0;animation:float 9s ease-in-out infinite}
+.blob1{width:280px;height:280px;background:#fb7185;top:-80px;left:-80px}
+.blob2{width:220px;height:220px;background:#facc15;bottom:-60px;right:-60px;animation-delay:2s}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-25px) scale(1.08)}}
+.wrap{max-width:880px;margin:auto;padding:20px;position:relative;z-index:1}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.brand{font-size:22px;font-weight:800}
+.brand span{color:var(--accent2)}
+.locktag{font-size:11px;font-weight:800;padding:6px 11px;border:1px solid #ffffff40;border-radius:99px;color:#fff}
+.bar{height:8px;background:#ffffff22;border-radius:20px;overflow:hidden;margin-bottom:16px}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s ease}
+.shell{background:#ffffff10;border:1px solid #ffffff20;border-radius:26px;padding:22px;backdrop-filter:blur(6px)}
+.screen{display:none;animation:fadein .5s ease}
+.screen.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#loginBox{max-width:420px;margin:20px auto;background:#fff;color:var(--text);padding:28px;border-radius:22px;text-align:center}
+#loginBox h1{color:#e11d48;font-size:18px;margin-bottom:4px}
+#loginBox p{color:#64748b;font-size:14px}
+.input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:1px solid #ddd;font-size:16px}
+#pesanLogin{margin-top:12px;font-weight:bold;font-size:14px}
+.hero{text-align:center;padding:20px 6px}
+.hero .icon{font-size:64px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.hero h1{font-size:clamp(20px,5.5vw,30px);margin:10px 0 6px}
+.hero p{color:#ffe4e6;line-height:1.6;max-width:600px;margin:auto}
+.legend{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.legend span{background:#ffffff14;padding:8px 13px;border-radius:99px;font-size:13px}
+.btn{border:0;border-radius:14px;padding:14px 22px;font-weight:800;cursor:pointer;background:#fff;color:var(--text);margin-top:18px;font-size:15px;transition:transform .15s ease;width:100%}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.chapter-intro{text-align:center;padding:36px 10px}
+.chapter-intro .badge{display:inline-block;font-size:13px;font-weight:800;padding:8px 16px;border-radius:99px;margin-bottom:14px;background:#ffffff20}
+.chapter-intro .icon{font-size:70px;animation:popin .5s ease}
+@keyframes popin{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.chapter-intro h2{font-size:24px;margin:10px 0}
+.chapter-intro p{color:#ffe4e6;line-height:1.6;max-width:520px;margin:auto}
+.game{background:#fff;color:var(--text);border-radius:22px;padding:22px}
+.kicker{font-size:12px;letter-spacing:1px;font-weight:800;color:#e11d48}
+.scene{background:linear-gradient(135deg,#ffe4e6,#fef9c3);border-radius:18px;padding:20px;min-height:150px;display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px;flex-direction:column}
+.scene .figure{font-size:56px;animation:entrance .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes entrance{0%{transform:translateY(30px) scale(.5);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+.dialog{width:100%;display:flex;flex-direction:column;gap:12px}
+.bubble-row{display:flex;align-items:flex-end;gap:10px;animation:entrance .5s ease}
+.bubble-row.right{justify-content:flex-end}
+.avatar{font-size:38px;flex-shrink:0}
+.bubble{background:#fff;border-radius:16px;padding:11px 14px;max-width:78%;box-shadow:0 4px 14px #33415522;line-height:1.4;font-size:14px;text-align:left}
+.bubble-row.right .bubble{background:#fee2e2}
+.voice-btn{align-self:center;margin-top:6px;background:#e11d48;color:#fff;border:0;border-radius:99px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer}
+.voice-btn:active{transform:scale(.96)}
+.kasusbox{width:100%;text-align:left;animation:entrance .5s ease}
+.kasus-label{font-size:11px;font-weight:800;color:#e11d48;letter-spacing:1px;margin-bottom:6px}
+.kasus-text{background:#fff;border-radius:14px;padding:14px;line-height:1.55;font-size:14px;box-shadow:0 4px 14px #33415522}
+/* VIDEO KASUS (adegan beruntun bernarasi) */
+.videobox{width:100%;text-align:center}
+.videobox .videolabel{font-size:11px;font-weight:800;color:#e11d48;letter-spacing:1px;margin-bottom:10px}
+.adegan-panel{background:#fff;border-radius:16px;padding:24px 18px;box-shadow:0 6px 20px #33415522;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.adegan-emoji{font-size:48px;animation:entrance .5s ease}
+.adegan-teks{font-size:14px;line-height:1.5;color:var(--text)}
+.adegan-progress{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.adegan-dot{width:8px;height:8px;border-radius:50%;background:#fecdd3}
+.adegan-dot.active{background:#e11d48}
+.video-controls{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.video-controls button{background:#e11d48;color:#fff;border:0;border-radius:99px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer}
+.video-controls button.secondary{background:#f1f5f9;color:var(--text)}
+.question{font-size:18px;font-weight:800;margin:16px 0 6px;line-height:1.5}
+.choices{display:grid;gap:10px;margin-top:14px}
+.choices.hidden-q{display:none}
+.choice{padding:14px;text-align:left;border:2px solid #e2e8f0;background:#f8fafc;border-radius:14px;cursor:pointer;color:var(--text);font-size:15px;display:flex;gap:10px;align-items:center;transition:transform .1s ease;width:100%}
+.choice:active{transform:scale(.98)}
+.choice .lt{background:#ffe4e6;color:#e11d48;font-weight:800;min-width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.choice.correct{background:#dcfce7;border-color:#16a34a;animation:pop .35s ease}
+.choice.correct .lt{background:#16a34a;color:#fff}
+.choice.wrong{background:#fee2e2;border-color:#dc2626;animation:shake .4s ease}
+.choice.wrong .lt{background:#dc2626;color:#fff}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.feedback{margin-top:14px;padding:15px;border-radius:14px;background:#fff1f2;line-height:1.55;animation:fadein .3s ease}
+.next{display:none;background:#172033;color:#fff}
+.puzzle-tiles{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tile{padding:12px 14px;background:#fff1f2;border:2px solid #fecdd3;border-radius:12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);transition:transform .1s ease}
+.tile:active{transform:scale(.96)}
+.tile:disabled{opacity:.35;cursor:not-allowed}
+.puzzle-slots{display:grid;gap:8px;margin-top:16px}
+.slot{padding:13px;border:2px dashed #cbd5e1;border-radius:12px;text-align:center;font-size:13px;color:#94a3b8;min-height:20px}
+.slot.filled{border-style:solid;border-color:#e11d48;background:#fff1f2;color:var(--text);font-weight:700;animation:pop .3s ease}
+.puzzle-msg{margin-top:14px}
+.result{text-align:center;padding:20px}
+.trophy{font-size:64px;animation:bob 2.4s ease-in-out infinite}
+.score{font-size:56px;font-weight:900;margin:6px 0}
+.small{color:#64748b;line-height:1.6}
+.confetti{position:fixed;top:-20px;width:9px;height:14px;z-index:5;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.sound-toggle{position:fixed;bottom:16px;right:16px;background:#ffffff20;border:1px solid #ffffff40;color:#fff;border-radius:99px;padding:9px 14px;font-size:13px;cursor:pointer;z-index:6}
+@media(max-width:600px){.scene{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Suara: ON</button>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">🧠 Mind<span>Arcade</span></div>
+    <div class="locktag">🔒 15 SOAL • PUZZLE + KASUS</div>
+  </div>
+  <div class="bar" id="topBar" style="display:none"><div class="fill" id="fill"></div></div>
+  <div class="shell">
+    <section class="screen active" id="loginScreen">
+      <div id="loginBox">
+        <h1>🔒 Silogisme, Etika &amp; Rasionalisme-Empirisme</h1>
+        <p>Masukkan Access Code pembelian kamu</p>
+        <input class="input" id="kode" placeholder="Contoh: MND-XXX-XXXXXX">
+        <input class="input" id="email" placeholder="Email pembeli">
+        <button class="btn" onclick="aktivasi()" id="btnAktivasi">🔓 Mulai Belajar</button>
+        <div id="pesanLogin"></div>
+      </div>
+    </section>
+    <section class="screen" id="intro">
+      <div class="hero">
+        <div class="icon">⚖️🧠</div>
+        <h1>Silogisme, Etika &amp; Rasionalisme-Empirisme</h1>
+        <p>Susun argumen logis lewat puzzle, hadapi dilema etika lewat "video" kasus beranimasi, dan telusuri perdebatan klasik akal vs pengalaman.</p>
+        <div class="legend"><span>🧩 Silogisme</span><span>⚖️ Dilema Etika</span><span>💭 Rasionalisme vs Empirisme</span></div>
+        <button class="btn" onclick="mulai()">Mulai Belajar →</button>
+      </div>
+    </section>
+    <section class="screen" id="chapterIntro">
+      <div class="chapter-intro">
+        <div class="badge" id="chapBadge"></div>
+        <div class="icon" id="chapIcon"></div>
+        <h2 id="chapTitle"></h2>
+        <p id="chapDesc"></p>
+        <button class="btn" onclick="mulaiPuzzleBab()">Mulai dengan Puzzle →</button>
+      </div>
+    </section>
+    <section class="screen" id="puzzleScreen">
+      <div class="game">
+        <div class="kicker" id="puzzleKicker"></div>
+        <h2 style="margin:6px 0 4px">🧩 Susun Urutan yang Tepat</h2>
+        <p class="small" id="puzzleDesc" style="color:#64748b"></p>
+        <div class="puzzle-tiles" id="puzzleTiles"></div>
+        <div class="puzzle-slots" id="puzzleSlots"></div>
+        <div class="puzzle-msg" id="puzzleMsg"></div>
+        <button class="btn next" id="puzzleNext" style="display:none">Lanjut ke Soal →</button>
+      </div>
+    </section>
+    <section class="screen" id="game">
+      <div class="game">
+        <div class="kicker" id="round"></div>
+        <div class="scene" id="scene"></div>
+        <div class="question" id="question"></div>
+        <div class="choices" id="choices"></div>
+        <div id="feedback"></div>
+        <button class="btn next" id="next">Lanjut →</button>
+      </div>
+    </section>
+    <section class="screen" id="finish">
+      <div class="game result">
+        <div class="trophy">🏆</div>
+        <div class="kicker">MISSION COMPLETE</div>
+        <h2>Logika &amp; Etika Explorer</h2>
+        <div class="score" id="score">0%</div>
+        <p class="small" id="message"></p>
+        <button class="btn" onclick="location.reload()">Main Lagi</button>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+const NAMA_PRODUK_INI = "Silogisme, Etika, dan Rasionalisme-Empirisme";
+
+let soundOn=true, audioCtx=null;
+function getCtx(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById("soundToggle").textContent=soundOn?"🔊 Suara: ON":"🔇 Suara: OFF";
+  if(!soundOn && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+function nada(freq,durasi=0.15,tipe='sine',delay=0,volume=0.16){
+  if(!soundOn) return;
+  try{
+    const ctx=getCtx();const osc=ctx.createOscillator();const gain=ctx.createGain();
+    osc.type=tipe;osc.frequency.value=freq;
+    gain.gain.setValueAtTime(volume,ctx.currentTime+delay);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+delay+durasi);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(ctx.currentTime+delay);osc.stop(ctx.currentTime+delay+durasi);
+  }catch(e){}
+}
+function suaraBenar(){ nada(659,0.12); nada(880,0.16,'sine',0.11); }
+function suaraSalah(){ nada(200,0.28,'sawtooth',0,0.12); }
+function suaraKlik(){ nada(500,0.05,'square',0,0.08); }
+function suaraTile(){ nada(740,0.07,'triangle',0,0.1); }
+function suaraFanfare(){ [523,659,784,1047].forEach((f,i)=>nada(f,0.2,'triangle',i*0.16,0.14)); }
+
+function ucapkan(teks){
+  if(!('speechSynthesis' in window)) return Promise.resolve();
+  return new Promise(resolve=>{
+    try{
+      const u = new SpeechSynthesisUtterance(teks);
+      u.lang='id-ID'; u.rate=1;
+      u.onend=resolve; u.onerror=resolve;
+      window.speechSynthesis.speak(u);
+    }catch(e){ resolve(); }
+  });
+}
+async function putarDialog(s){
+  if(!soundOn || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  await ucapkan(s.sa);
+  await ucapkan(s.sb);
+}
+
+async function apiCall(action, payload) {
+  const res = await fetch("/.netlify/functions/api", { method:"POST", body: JSON.stringify(Object.assign({action:action},payload)) });
+  return await res.json();
+}
+async function aktivasi(){
+  const kode=document.getElementById("kode").value.trim();
+  const email=document.getElementById("email").value.trim();
+  const pesan=document.getElementById("pesanLogin");
+  if(kode===""||email===""){ pesan.innerHTML="⚠️ Isi kode dan email terlebih dahulu"; return; }
+  const btn=document.getElementById("btnAktivasi");
+  btn.disabled=true; btn.innerHTML="Memproses..."; pesan.innerHTML="";
+  try{
+    const res=await apiCall("cekKodeAkses",{kode,email});
+    if(res.error){ pesan.innerHTML="❌ Error server: "+res.error; btn.disabled=false; btn.innerHTML="🔓 Mulai Belajar"; return; }
+    if(!res.sukses){ pesan.innerHTML=res.pesan||"❌ Kode tidak valid"; btn.disabled=false; btn.innerHTML="🔓 Mulai Belajar"; return; }
+    const produkDiKode=String(res.produk||"").trim();
+    if(produkDiKode!==NAMA_PRODUK_INI){
+      pesan.innerHTML="❌ Kode ini bukan untuk produk '"+NAMA_PRODUK_INI+"'. Kode kamu untuk: "+produkDiKode;
+      btn.disabled=false; btn.innerHTML="🔓 Mulai Belajar"; return;
+    }
+    document.getElementById("loginScreen").classList.remove("active");
+    document.getElementById("topBar").style.display="block";
+    getCtx(); show("intro");
+  }catch(err){
+    pesan.innerHTML="❌ Gagal konek ke server: "+err.message;
+    btn.disabled=false; btn.innerHTML="🔓 Mulai Belajar";
+  }
+}
+
+const BAB = [
+  {
+    id:"silogisme", badge:"🧩 BAGIAN 1", icon:"🧩⚖️",
+    judul:"Silogisme & Logika Formal",
+    deskripsi:"Silogisme adalah bentuk penalaran deduktif klasik — dua premis yang menghasilkan satu kesimpulan logis.",
+    puzzleDesc:"Susun silogisme yang valid: klik Premis Mayor, lalu Premis Minor, lalu Kesimpulan secara berurutan.",
+    puzzleUrutan:["Premis Mayor: Semua manusia adalah makhluk fana","Premis Minor: Socrates adalah manusia","Kesimpulan: Socrates adalah makhluk fana"],
+    soal:[
+      { tipe:"normal", figur:"📐🧠", pertanyaan:"Bentuk penalaran deduktif yang terdiri dari dua premis dan satu kesimpulan disebut...",
+        opsi:["Analogi","Silogisme","Generalisasi","Dilema"], jawaban:1,
+        penjelasan:"Silogisme adalah bentuk penalaran deduktif klasik dengan dua premis yang menghasilkan satu kesimpulan logis." },
+      { tipe:"kasus", teksKasus:"'Premis 1: Semua kucing adalah hewan. Premis 2: Semua anjing adalah hewan. Kesimpulan: Semua kucing adalah anjing.'",
+        pertanyaan:"Silogisme ini...",
+        opsi:["Valid","Tidak valid, karena strukturnya salah","Valid tapi tidak sound","Sound"], jawaban:1,
+        penjelasan:"Meski premisnya benar, strukturnya keliru — dua premis afirmatif tentang kategori berbeda tidak bisa menghasilkan kesimpulan seperti itu. Ini silogisme tidak valid." },
+      { tipe:"normal", figur:"🏔️📢", pertanyaan:"Premis yang bersifat umum dalam sebuah silogisme (misal 'Semua manusia adalah makhluk fana') disebut premis...",
+        opsi:["Minor","Mayor","Konklusi","Asumsi"], jawaban:1,
+        penjelasan:"Premis mayor adalah pernyataan umum yang menjadi dasar silogisme." },
+      { tipe:"normal", figur:"🔍👤", pertanyaan:"Premis yang bersifat khusus, menghubungkan subjek spesifik dengan kategori di premis mayor, disebut premis...",
+        opsi:["Mayor","Minor","Universal","Implisit"], jawaban:1,
+        penjelasan:"Premis minor menghubungkan kasus spesifik dengan pernyataan umum di premis mayor." },
+      { tipe:"dialog", a:"🧑‍🎓", b:"🧑‍🏫", sa:"Kalau saya belajar, saya akan lulus. Saya belajar. Maka...", sb:"Maka kamu pasti lulus! Itu namanya modus ponens.",
+        pertanyaan:"Bentuk penalaran 'Jika P maka Q; P benar; maka Q benar' disebut...",
+        opsi:["Modus tollens","Modus ponens","Silogisme disjungtif","Reductio ad absurdum"], jawaban:1,
+        penjelasan:"Modus ponens adalah bentuk penalaran valid: jika P→Q dan P benar, maka Q pasti benar." },
+    ]
+  },
+  {
+    id:"etika", badge:"⚖️ BAGIAN 2", icon:"⚖️❤️",
+    judul:"Dilema Etika",
+    deskripsi:"Ketika nilai-nilai bertabrakan, berbagai mazhab etika menawarkan cara berpikir berbeda untuk memutuskan mana yang 'benar'.",
+    puzzleDesc:"Klik langkah-langkah menganalisis dilema etika sesuai urutan yang tepat.",
+    puzzleUrutan:["Identifikasi dilema / konflik nilai","Kenali pemangku kepentingan yang terdampak","Terapkan kerangka etika (utilitarianisme/deontologi)","Tentukan keputusan & pertanggungjawabkan alasannya"],
+    soal:[
+      { tipe:"normal", figur:"⚖️👥", pertanyaan:"Pendekatan etika yang menilai tindakan benar berdasarkan HASIL/KONSEKUENSI yang memberi manfaat terbesar bagi banyak orang disebut...",
+        opsi:["Deontologi","Utilitarianisme","Etika keutamaan","Relativisme"], jawaban:1,
+        penjelasan:"Utilitarianisme menilai benar-salah suatu tindakan dari konsekuensinya — memaksimalkan manfaat bagi sebanyak mungkin orang." },
+      { tipe:"normal", figur:"📜✅", pertanyaan:"Pendekatan etika yang menilai tindakan benar berdasarkan KEWAJIBAN/ATURAN moral itu sendiri, terlepas dari hasilnya, disebut...",
+        opsi:["Utilitarianisme","Deontologi","Hedonisme","Nihilisme"], jawaban:1,
+        penjelasan:"Deontologi menilai tindakan dari kesesuaiannya dengan kewajiban/aturan moral, bukan dari hasilnya." },
+      { tipe:"video-kasus",
+        adegan:[
+          {emoji:"🚋", teks:"Sebuah kereta melaju kencang menuju lima orang yang terikat di rel."},
+          {emoji:"🎚️", teks:"Kamu bisa menarik tuas untuk mengalihkan kereta ke rel lain."},
+          {emoji:"🧍", teks:"Tapi di rel lain itu, ada satu orang yang juga terikat."}
+        ],
+        pertanyaan:"Jika kamu menarik tuas demi menyelamatkan lima orang meski satu orang lain jadi korban, keputusanmu paling sesuai dengan prinsip etika...",
+        opsi:["Deontologi","Utilitarianisme","Etika keutamaan","Egoisme"], jawaban:1,
+        penjelasan:"Memilih hasil dengan manfaat terbesar (menyelamatkan lebih banyak nyawa) mencerminkan prinsip utilitarianisme." },
+      { tipe:"kasus", teksKasus:"Seorang mahasiswa menemukan dompet berisi uang tunai. Ia yakin mengembalikannya adalah kewajiban moral, terlepas dari apakah pemiliknya akan tahu atau memberi imbalan.",
+        pertanyaan:"Cara berpikir mahasiswa ini mencerminkan pendekatan etika...",
+        opsi:["Utilitarianisme","Deontologi","Hedonisme","Egoisme"], jawaban:1,
+        penjelasan:"Fokus pada kewajiban moral itu sendiri (bukan hasil/konsekuensi) adalah ciri khas deontologi." },
+      { tipe:"normal", figur:"🌟🧍", pertanyaan:"Pendekatan etika yang berfokus pada KARAKTER/KEBAJIKAN seseorang (misal kejujuran, keberanian) daripada aturan atau hasil, disebut etika...",
+        opsi:["Utilitarianisme","Deontologi","Keutamaan (virtue ethics)","Relativisme"], jawaban:2,
+        penjelasan:"Etika keutamaan menilai moralitas dari karakter/kebajikan seseorang, bukan aturan atau hasil tindakan." },
+    ]
+  },
+  {
+    id:"rasionalisme-empirisme", badge:"💭 BAGIAN 3", icon:"💭📖",
+    judul:"Rasionalisme vs Empirisme",
+    deskripsi:"Dari mana sebenarnya pengetahuan manusia berasal — dari akal murni, atau dari pengalaman indrawi? Ini perdebatan klasik dalam epistemologi.",
+    puzzleDesc:"Klik tokoh di bawah sesuai urutan kemunculannya dalam sejarah perdebatan rasionalisme-empirisme.",
+    puzzleUrutan:["René Descartes — Rasionalisme (awal 1600an)","John Locke — Empirisme (akhir 1600an)","David Hume — Empirisme (1700an)","Immanuel Kant — mencoba menjembatani keduanya (akhir 1700an)"],
+    soal:[
+      { tipe:"normal", figur:"🧠💡", pertanyaan:"Aliran filsafat yang menyatakan bahwa AKAL/RASIO adalah sumber utama pengetahuan disebut...",
+        opsi:["Empirisme","Rasionalisme","Skeptisisme","Idealisme"], jawaban:1,
+        penjelasan:"Rasionalisme menempatkan akal/rasio sebagai sumber utama pengetahuan yang benar." },
+      { tipe:"normal", figur:"👁️🌍", pertanyaan:"Aliran filsafat yang menyatakan bahwa PENGALAMAN INDRAWI adalah sumber utama pengetahuan disebut...",
+        opsi:["Rasionalisme","Empirisme","Nihilisme","Fenomenologi"], jawaban:1,
+        penjelasan:"Empirisme menempatkan pengalaman indrawi sebagai sumber utama pengetahuan." },
+      { tipe:"dialog", a:"🧑‍🎓", b:"🧑‍🎓", sa:"Aku tahu 2+2=4 murni lewat akal, tanpa perlu mengalaminya langsung.", sb:"Tapi bagaimana kamu tahu konsep angka itu sendiri, kalau bukan dari pengalaman berhitung benda-benda di dunia nyata?",
+        pertanyaan:"Perdebatan ini menggambarkan ketegangan klasik antara...",
+        opsi:["Idealisme dan realisme","Rasionalisme dan empirisme","Deontologi dan utilitarianisme","Ontologi dan aksiologi"], jawaban:1,
+        penjelasan:"Ini adalah perdebatan klasik rasionalisme (pengetahuan dari akal) vs empirisme (pengetahuan dari pengalaman)." },
+      { tipe:"normal", figur:"💭➡️✅", pertanyaan:"Filsuf yang terkenal dengan pernyataan 'Cogito, ergo sum' (aku berpikir, maka aku ada), dan dianggap tokoh penting rasionalisme, adalah...",
+        opsi:["John Locke","David Hume","René Descartes","Aristoteles"], jawaban:2,
+        penjelasan:"René Descartes terkenal dengan 'Cogito, ergo sum' — argumen dasar rasionalisme yang mencari kepastian lewat akal." },
+      { tipe:"video-kasus",
+        adegan:[
+          {emoji:"📄", teks:"Bayangkan pikiran manusia saat lahir seperti kertas kosong."},
+          {emoji:"👁️✨", teks:"Menurut John Locke, semua pengetahuan kita terisi lewat pengalaman indrawi seiring waktu."},
+          {emoji:"🏷️", teks:"Konsep ini disebut 'tabula rasa'."}
+        ],
+        pertanyaan:"Konsep 'tabula rasa' paling erat berkaitan dengan pandangan...",
+        opsi:["Rasionalisme murni","Empirisme","Idealisme Platonis","Nihilisme"], jawaban:1,
+        penjelasan:"Tabula rasa (pikiran sebagai 'kertas kosong' saat lahir) adalah konsep sentral empirisme Locke — pengetahuan terbentuk dari pengalaman, bukan bawaan lahir." },
+    ]
+  },
+];
+
+let babIndex=0, soalIndex=0, benar=0, totalSoal=BAB.reduce((a,b)=>a+b.soal.length,0), soalKeBerapa=0;
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); }
+function updateBar(){ document.getElementById("fill").style.width=(soalKeBerapa/totalSoal*100)+"%"; }
+function mulai(){ suaraKlik(); babIndex=0; tampilkanChapterIntro(); }
+function tampilkanChapterIntro(){
+  const bab=BAB[babIndex];
+  document.getElementById("chapBadge").textContent=bab.badge;
+  document.getElementById("chapIcon").textContent=bab.icon;
+  document.getElementById("chapTitle").textContent=bab.judul;
+  document.getElementById("chapDesc").textContent=bab.deskripsi;
+  show("chapterIntro");
+}
+
+let puzzleUrutanBenar=[], puzzleTerpilih=[];
+function mulaiPuzzleBab(){
+  suaraKlik();
+  const bab=BAB[babIndex];
+  puzzleUrutanBenar=bab.puzzleUrutan; puzzleTerpilih=[];
+  document.getElementById("puzzleKicker").textContent=bab.judul.toUpperCase();
+  document.getElementById("puzzleDesc").textContent=bab.puzzleDesc;
+  document.getElementById("puzzleMsg").innerHTML="";
+  document.getElementById("puzzleNext").style.display="none";
+  const tilesEl=document.getElementById("puzzleTiles"); tilesEl.innerHTML="";
+  const acak=[...puzzleUrutanBenar].sort(()=>Math.random()-0.5);
+  acak.forEach(teks=>{
+    const b=document.createElement("button"); b.className="tile"; b.textContent=teks;
+    b.onclick=()=>pilihTile(teks,b); tilesEl.appendChild(b);
+  });
+  const slotsEl=document.getElementById("puzzleSlots");
+  slotsEl.innerHTML=puzzleUrutanBenar.map((_,i)=>'<div class="slot" id="pslot'+i+'">Urutan '+(i+1)+'</div>').join("");
+  show("puzzleScreen");
+}
+function pilihTile(teks,btn){
+  if(puzzleTerpilih.includes(teks)) return;
+  suaraTile(); puzzleTerpilih.push(teks); btn.disabled=true;
+  const slot=document.getElementById("pslot"+(puzzleTerpilih.length-1));
+  slot.textContent=teks; slot.classList.add("filled");
+  if(puzzleTerpilih.length===puzzleUrutanBenar.length){
+    const benarSemua=puzzleTerpilih.every((t,i)=>t===puzzleUrutanBenar[i]);
+    const msg=document.getElementById("puzzleMsg");
+    if(benarSemua){
+      suaraBenar();
+      msg.innerHTML='<div class="feedback">✅ <b>Tepat!</b> Kamu berhasil menyusun urutan dengan benar.</div>';
+      document.getElementById("puzzleNext").style.display="inline-block";
+    } else {
+      suaraSalah();
+      msg.innerHTML='<div class="feedback">💡 Urutannya belum pas. Yuk coba lagi!</div>';
+      setTimeout(()=>mulaiPuzzleBab(),1400);
+    }
+  }
+}
+document.getElementById("puzzleNext").onclick=function(){
+  suaraKlik(); soalIndex=0; show("game"); renderSoal();
+};
+
+function renderScene(s){
+  if(s.tipe==="dialog"){
+    return '<div class="dialog">'+
+      '<div class="bubble-row"><div class="avatar">'+s.a+'</div><div class="bubble">'+s.sa+'</div></div>'+
+      '<div class="bubble-row right"><div class="bubble">'+s.sb+'</div><div class="avatar">'+s.b+'</div></div>'+
+      '<button class="voice-btn" id="voiceBtn">🔊 Putar Percakapan</button>'+
+    '</div>';
+  } else if(s.tipe==="kasus"){
+    return '<div class="kasusbox"><div class="kasus-label">📋 STUDI KASUS</div><div class="kasus-text">'+s.teksKasus+'</div></div>';
+  } else if(s.tipe==="video-kasus"){
+    return '<div class="videobox">'+
+      '<div class="videolabel">🎬 STUDI KASUS BERANIMASI</div>'+
+      '<div class="adegan-panel" id="adeganPanel"></div>'+
+      '<div class="adegan-progress" id="adeganProgress"></div>'+
+      '<div class="video-controls">'+
+        '<button class="secondary" id="btnUlang">🔁 Putar Ulang</button>'+
+        '<button id="btnLanjutKeSoal" style="display:none">Lanjut ke Pertanyaan →</button>'+
+      '</div>'+
+    '</div>';
+  } else {
+    return '<div class="figure">'+s.figur+'</div>';
+  }
+}
+
+let videoTimer = null;
+async function putarVideoKasus(s){
+  const panel = document.getElementById("adeganPanel");
+  const progress = document.getElementById("adeganProgress");
+  const btnLanjut = document.getElementById("btnLanjutKeSoal");
+  const choicesEl = document.getElementById("choices");
+  choicesEl.classList.add("hidden-q");
+  btnLanjut.style.display = "none";
+
+  progress.innerHTML = s.adegan.map((_,i)=>'<span class="adegan-dot" id="adot'+i+'"></span>').join("");
+
+  for(let i=0;i<s.adegan.length;i++){
+    const ad = s.adegan[i];
+    document.querySelectorAll(".adegan-dot").forEach(d=>d.classList.remove("active"));
+    const dot = document.getElementById("adot"+i);
+    if(dot) dot.classList.add("active");
+    panel.innerHTML = '<div class="adegan-emoji">'+ad.emoji+'</div><div class="adegan-teks">'+ad.teks+'</div>';
+    if(soundOn) await ucapkan(ad.teks);
+    else await new Promise(r=>setTimeout(r,1600));
+  }
+  btnLanjut.style.display = "inline-block";
+  btnLanjut.onclick = ()=>{
+    suaraKlik();
+    choicesEl.classList.remove("hidden-q");
+    document.getElementById("btnUlang").style.display="none";
+    btnLanjut.style.display="none";
+  };
+}
+
+function renderSoal(){
+  const bab=BAB[babIndex]; const s=bab.soal[soalIndex];
+  soalKeBerapa=BAB.slice(0,babIndex).reduce((a,b)=>a+b.soal.length,0)+soalIndex;
+  updateBar();
+  document.getElementById("round").textContent=bab.judul.toUpperCase()+" • Soal "+(soalIndex+1)+"/"+bab.soal.length;
+  document.getElementById("scene").innerHTML=renderScene(s);
+  document.getElementById("question").textContent=s.pertanyaan;
+  const choicesEl=document.getElementById("choices"); choicesEl.innerHTML="";
+  choicesEl.classList.remove("hidden-q");
+  s.opsi.forEach((op,i)=>{
+    const b=document.createElement("button"); b.className="choice";
+    b.innerHTML='<span class="lt">'+String.fromCharCode(65+i)+'</span><span>'+op+'</span>';
+    b.onclick=()=>jawab(i,b,s); choicesEl.appendChild(b);
+  });
+  document.getElementById("feedback").innerHTML="";
+  const next=document.getElementById("next"); next.style.display="none"; next.onclick=lanjut;
+
+  if(s.tipe==="dialog"){
+    const vb = document.getElementById("voiceBtn");
+    if(vb) vb.onclick = ()=>putarDialog(s);
+    putarDialog(s);
+  } else if(s.tipe==="video-kasus"){
+    document.getElementById("btnUlang").onclick = ()=>putarVideoKasus(s);
+    putarVideoKasus(s);
+  }
+}
+function jawab(i,btn,s){
+  suaraKlik();
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+  const fb=document.getElementById("feedback");
+  if(i===s.jawaban){
+    benar++; btn.classList.add("correct"); suaraBenar();
+    fb.innerHTML='<div class="feedback">✅ <b>Tepat!</b><br>'+s.penjelasan+'</div>';
+  } else {
+    btn.classList.add("wrong");
+    document.querySelectorAll(".choice")[s.jawaban].classList.add("correct");
+    suaraSalah();
+    fb.innerHTML='<div class="feedback">💡 <b>Belum tepat.</b> Jawaban yang benar: <b>'+s.opsi[s.jawaban]+'</b><br>'+s.penjelasan+'</div>';
+  }
+  const bab=BAB[babIndex]; const next=document.getElementById("next");
+  const soalTerakhirDiBab=soalIndex===bab.soal.length-1;
+  const babTerakhir=babIndex===BAB.length-1;
+  next.textContent=(soalTerakhirDiBab&&babTerakhir)?"Lihat Hasil →":(soalTerakhirDiBab?"Lanjut ke Bab Berikutnya →":"Lanjut →");
+  next.style.display="inline-block";
+}
+function lanjut(){
+  suaraKlik();
+  const bab=BAB[babIndex];
+  if(soalIndex<bab.soal.length-1){ soalIndex++; renderSoal(); }
+  else if(babIndex<BAB.length-1){ babIndex++; tampilkanChapterIntro(); }
+  else { selesai(); }
+}
+function selesai(){
+  soalKeBerapa=totalSoal; updateBar();
+  show("finish"); suaraFanfare(); buatConfetti();
+  const persen=Math.round(benar/totalSoal*100);
+  document.getElementById("score").textContent=persen+"%";
+  let pesan;
+  if(persen>=85) pesan="Luar biasa! Kemampuan logika, etika, dan pemahamanmu soal sumber pengetahuan sudah kuat.";
+  else if(persen>=60) pesan="Bagus! Coba review lagi bagian yang meleset, biar makin mantap.";
+  else pesan="Yuk pelajari lagi materinya — coba ulangi buat lihat progresmu.";
+  document.getElementById("message").textContent=pesan;
+}
+function buatConfetti(){
+  const warna=["#fb7185","#facc15","#38bdf8","#4ade80","#c084fc"];
+  for(let i=0;i<40;i++){
+    const c=document.createElement("div"); c.className="confetti";
+    c.style.left=Math.random()*100+"vw"; c.style.background=warna[Math.floor(Math.random()*warna.length)];
+    c.style.animationDuration=(2.5+Math.random()*2)+"s"; c.style.animationDelay=(Math.random()*0.6)+"s";
+    document.body.appendChild(c); setTimeout(()=>c.remove(),5000);
+  }
+}
+</script>
+</body>
+</html>
