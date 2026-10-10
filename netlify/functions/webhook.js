@@ -138,7 +138,15 @@ exports.handler = async (event) => {
     if (messageAction !== "SUCCESS") {
       return { statusCode: 200, body: JSON.stringify({ ok: true, info: "message_action bukan SUCCESS" }) };
     }
-
+const BL_URL = process.env.BEHAVIORLAB_WEBHOOK_URL;
+if (BL_URL && (md.items || []).some((i) => /behavior\s*lab/i.test(i.title || ""))) {
+  await fetch(BL_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-lynk-signature": (event.headers["x-lynk-signature"] || event.headers["X-Lynk-Signature"] || "") },
+    body: rawBody,
+  });
+  return { statusCode: 200, body: JSON.stringify({ ok: true, info: "diteruskan ke Behavior Lab" }) };
+}
     const amount = md.totals ? md.totals.grandTotal : "";
     const refId = md.refId || "";
     const sigCheck = verifikasiSignature(event.headers, amount, refId, messageId);
